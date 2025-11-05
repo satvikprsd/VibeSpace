@@ -7,8 +7,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-/.next/
-/build
+*/.next/
+*/build
 public
 dist
 dist-ssr
@@ -24,3 +24,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+*.tsbuildinfo
+next-env.d.ts
