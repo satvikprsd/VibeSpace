@@ -25,7 +25,7 @@ app.use(cors(corsOptions));
 
 app.use('/api/v1/user', userRoutes);
 
-server.listen(PORT,()=>{
+app.listen(PORT,()=>{
     connectDB();
     console.log(`Server at port ${PORT}`)
 });
