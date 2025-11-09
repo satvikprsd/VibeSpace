@@ -1,3 +1,4 @@
+import { stat } from "fs";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -5,6 +6,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    githubId: {
+        type: String,
+        unique: true,
+        default: null
+    },
+    githubProfileUrl: {
+        type: String,
+        default: ''
     },
     name: {
         type: String,
@@ -19,10 +29,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    profilePic: {
+    avatar: {
         type: String,
         default: 'default.jpg'
     },
+    status: {
+        type: String,
+        enum: ['online', 'offline', 'dnd', 'idle', 'invisible'],
+        default: 'offline'
+    },
+    activity: {
+        type: String,
+        default: ''
+    },
+    friends : [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     dob: {
         type: Date,
         default: null
