@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/theme-selector";
 import { Toaster } from "@/components/ui/sonner";
+import SideBar from "./(main)/components/SideBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,14 +33,17 @@ export default function RootLayout({
       >
       <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
         <div className="fixed top-4 right-4 z-50">
           <ModeToggle />
         </div>
-        {children}
+        <div className="flex h-screen overflow-hidden">
+          <SideBar />
+          <main className="flex-1 flex">{children}</main>
+        </div>
         <Toaster />
       </ThemeProvider>
       </body>
