@@ -7,6 +7,7 @@ import Loader from "../../components/ui/loader";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { signUpUser } from "@/services/userService";
 
 interface SignUpProps {
   username: string;
@@ -31,18 +32,8 @@ const SignUp = () => {
     event.preventDefault();
     try {
       setLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/user/register`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(inputs),
-        }
-      );
-      const data = await response.json();
+      const response = await signUpUser(inputs);
+      const data = response.data;
       if (data.success) {
         toast.success(data.message);
         setInputs({ username: "", email: "", password: "" });

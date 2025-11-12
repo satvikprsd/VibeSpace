@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/theme-selector";
 import { Toaster } from "@/components/ui/sonner";
 import SideBar from "./(main)/components/SideBar";
+import { Logout } from "@/components/logout-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,10 +41,10 @@ export default function RootLayout({
         <div className="fixed top-4 right-4 z-50">
           <ModeToggle />
         </div>
-        <div className="flex h-screen overflow-hidden">
-          <SideBar />
-          <main className="flex-1 flex">{children}</main>
+         <div className="fixed bottom-4 left-4 z-50">
+          <Logout />
         </div>
+        {children}
         <Toaster />
       </ThemeProvider>
       </body>

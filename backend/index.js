@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import connectDB from './components/db.js';
 import userRoutes from './routes/user.route.js';
 import serverRoutes from './routes/server.route.js';
+import authRoutes from './routes/auth.route.js';
 
 dotenv.config();
 
@@ -24,8 +25,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use('/api/v1/user', userRoutes);
-app.use('/api/v1/server', serverRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/servers', serverRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 app.listen(PORT,()=>{
     connectDB();

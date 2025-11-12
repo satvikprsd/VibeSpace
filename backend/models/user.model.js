@@ -1,4 +1,3 @@
-import { stat } from "fs";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -11,6 +10,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         default: null
+    },
+    githubUsername: {
+        type: String,
+    },
+    githubAccessToken: {
+        type: String,
+        select: false,
+    },
+    githubRefreshToken: {
+        type: String,
+        select: false,
     },
     githubProfileUrl: {
         type: String,
@@ -45,6 +55,10 @@ const userSchema = new mongoose.Schema({
     friends : [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    }],
+    servers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Server'
     }],
     dob: {
         type: Date,
