@@ -18,10 +18,10 @@ const serverSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    // channels: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Channel'  
-    // }],
+    textChannels: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TextChannel'  
+    }],
     members : [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -31,3 +31,5 @@ const serverSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+
+export const Server = mongoose.model('Server', serverSchema);

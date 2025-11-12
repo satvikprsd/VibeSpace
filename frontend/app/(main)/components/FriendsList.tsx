@@ -20,8 +20,8 @@ export const FriendsList = () => {
               <p className="font-medium">{f.name}</p>
               <p className="text-xs text-gray-400">{f.status}</p>
             </div>
-            <button className="text-sm px-3 py-3 rounded-full text-white hover:bg-background">
-              <MessageCircle fill="white" />
+            <button className="text-xs px-3 py-3 rounded-full text-white hover:bg-[#2f3136]">
+              <MessageCircle className="w-5 h-5" fill="white"/>
             </button>
           </div>
         ))}
