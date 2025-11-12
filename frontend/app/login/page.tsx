@@ -8,6 +8,7 @@ import Loader from "../../components/ui/loader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginUser } from "@/services/userService";
+import { AxiosError } from "axios";
 
 interface SignInProps {
   usernameoremail: string;
@@ -35,7 +36,7 @@ const SignIn = () => {
       setLoading(true);
       const response = await loginUser(inputs);
       const data = response.data;
-
+      console.log(response);
       if (data.success) {
         toast.success(data.message);
         setInputs({
@@ -46,8 +47,9 @@ const SignIn = () => {
       } else {
         toast.error(data.message || "Something went wrong");
       }
-    } catch (error) {
-      if (error instanceof Error) toast.error(error.message);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      if (error instanceof Error) toast.error(error.response?.data?.message || error.message);
       else toast.error("Something went wrong");
     } finally {
       setLoading(false);
@@ -94,13 +96,13 @@ const SignIn = () => {
         <div className="flex flex-col gap-2">
           <Button
             type="submit"
-            className="bg-primary text-primary-foreground py-2 rounded-md font-medium transition-transform duration-150 active:scale-95"
+            className="bg-primary text-primary-foreground py-2 rounded-md font-medium transition-transform duration-150 active:scale-95 hover:cursor-pointer"
           >
             {loading ? <Loader className="mb-5" /> : "Sign In"}
           </Button>
           <Button
-            type="submit"
-            className="bg-black hover:bg-black/60 text-primary-foreground py-2 rounded-md font-medium transition-transform duration-150 active:scale-95"
+            type="button"
+            className="bg-black hover:bg-black/60 text-primary-foreground py-2 rounded-md font-medium transition-transform duration-150 active:scale-95 hover:cursor-pointer"
             onClick={() => window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/auth/github"}
           >
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 98 96" preserveAspectRatio="xMidYMid meet" role="img" aria-label="icon">

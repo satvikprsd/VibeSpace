@@ -8,6 +8,7 @@ const serverSchema = new mongoose.Schema({
     githubRepoId: {
         type: String,
         unique: true,
+        sparse: true,
     },
     owner : {
         type: mongoose.Schema.Types.ObjectId,

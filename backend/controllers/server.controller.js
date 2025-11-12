@@ -1,3 +1,4 @@
+import { Invite } from "../models/invite.model.js";
 import { Server } from "../models/server.model.js";
 
 export const createServer = async (req, res) => {
@@ -41,12 +42,39 @@ export const getServerById = async (req, res) => {
     }
 }
 
-export const joinServer = async (req, res) => {
+export const generateInvite = async (req, res) => {
     try {
         const { serverId } = req.params;
+        const { expiresAt } = req.body;
+        const server = await Server.findById(serverId);
+        if (!server) {
+            return res.status(404).json({ message: 'Server not found' });
+        }
+        const inviteCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+        const invite = await Invite.create({
+            code: inviteCode,
+            server: server._id,
+            createdBy: req.user.id,
+            expiresAt: expiresAt ? new Date(expiresAt) :new Date(Date.now() + 60*1000)
+        });
+        res.status(200).json({ success: true, inviteCode, expiresAt: invite.expiresAt });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const joinServer = async (req, res) => {
+    try {
+        const { inviteCode } = req.params;
         const userId = req.user.id;
         
-        const server = await Server.findById(serverId);
+        const invite = await Invite.findOne({ code: inviteCode }).populate('server');
+        if (!invite) {
+            return res.status(404).json({ message: 'Invalid or Expired invite code' });
+        }
+        const server = invite.server;
         if (!server) {
             return res.status(404).json({ message: 'Server not found' });
         }

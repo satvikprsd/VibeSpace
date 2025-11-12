@@ -14,14 +14,14 @@ export const FriendsList = () => {
         {friends.map((f) => (
           <div
             key={f.name}
-            className="flex justify-between items-center bg-[#2f3136] p-3 rounded hover:bg-[#40444b]"
+            className="flex justify-between items-center p-3 rounded hover:bg-foreground/10 transition-colors"
           >
             <div>
-              <p className="font-medium">{f.name}</p>
-              <p className="text-xs text-gray-400">{f.status}</p>
+              <p className="font-medium text-foreground">{f.name}</p>
+              <p className="text-xs text-muted-foreground">{f.status}</p>
             </div>
-            <button className="text-xs px-3 py-3 rounded-full text-white hover:bg-[#2f3136]">
-              <MessageCircle className="w-5 h-5" fill="white"/>
+            <button className="text-xs px-3 py-3 rounded-full hover:bg-foreground/10">
+              <MessageCircle className="w-5 h-5 text-foreground" fill="white"/>
             </button>
           </div>
         ))}

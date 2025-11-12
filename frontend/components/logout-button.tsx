@@ -8,7 +8,7 @@ export function Logout() {
         onClick={() => {
             window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/users/logout"
         }}
-        className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md font-medium transition-transform duration-150 active:scale-95"
+        className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md font-medium transition-transform duration-150 active:scale-95 hover:cursor-pointer"
         >
         <LogOut />
         </Button>
