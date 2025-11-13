@@ -1,6 +1,7 @@
 import { getMe } from "@/services/userService";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 
 const useGetMe = () => {
@@ -11,6 +12,7 @@ const useGetMe = () => {
                 const response = await getMe();
                 if (response.status != 200) {
                     console.log("No token found");
+                    toast.warning("No active session found. Please login.");
                     router.push("/login");
                     return;
                 }

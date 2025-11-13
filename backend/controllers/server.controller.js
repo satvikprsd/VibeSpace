@@ -17,7 +17,7 @@ export const createServer = async (req, res) => {
             members: [ownerId]
         });
 
-        res.status(201).json({ success: true, server: newServer });
+        res.status(201).json({ success: true, server: newServer, message: 'Server created successfully' });
     }
     catch (error) {
         console.error(error);
@@ -112,6 +112,18 @@ export const leaveServer = async (req, res) => {
         await server.save();
         
         res.status(200).json({ success: true, message: 'Left server successfully', server });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const getUserServers = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const servers = await Server.find({ members: userId }).populate({ path: 'owner', select: '-password' }).populate({ path: 'members', select: '-password' });
+        res.status(200).json({ success: true, servers });
     }
     catch (error) {
         console.error(error);

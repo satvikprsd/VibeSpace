@@ -43,7 +43,7 @@ const SignIn = () => {
           usernameoremail: "",
           password: "",
         });
-        navigate("/");
+        navigate("/channels/@me");
       } else {
         toast.error(data.message || "Something went wrong");
       }

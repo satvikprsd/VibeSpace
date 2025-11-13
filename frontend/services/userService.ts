@@ -1,11 +1,11 @@
 import axios, { AxiosError } from "axios";
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-axios.defaults.baseURL = API_URL + '/api/v1/users';
+axios.defaults.baseURL = API_URL + '/api/v1';
 axios.defaults.withCredentials = true;
 
 export const getMe = async () => {
     try {
-        const response = await axios.get('/me', {
+        const response = await axios.get('/users/me', {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -24,7 +24,7 @@ export const getMe = async () => {
 }
 export const loginUser = async (credentials: { usernameoremail: string; password: string; }) => {
     try {
-        const response = await axios.post('/login', credentials, {
+        const response = await axios.post('/users/login', credentials, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -39,7 +39,7 @@ export const loginUser = async (credentials: { usernameoremail: string; password
 
 export const signUpUser = async (userData: { username: string; email: string; password: string; }) => {
     try {
-        const response = await axios.post('/register', userData, {
+        const response = await axios.post('/users/register', userData, {
             headers: {
                 'Content-Type': 'application/json',
             },
