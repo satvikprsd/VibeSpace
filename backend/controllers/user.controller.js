@@ -150,9 +150,15 @@ export const handleFriendRequest = async (req, res) => {
         if (!friendRequest || friendRequest.to.toString() !== userId) {
             return res.status(404).json({ message: 'Friend request not found' });
         }
+        const friend = await User.findById(friendRequest.from);
+        if (!friend) {
+            return res.status(404).json({ message: 'friend not found' });
+        }
         if (action === 'accept') {
             friendRequest.status = 'accepted';
             user.friends.push(friendRequest.from);
+            friend.friends.push(userId);
+            await friend.save();
             await friendRequest.save();
             await user.save();
         }
