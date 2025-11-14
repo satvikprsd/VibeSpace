@@ -2,7 +2,7 @@ import { de } from "zod/locales";
 import {create} from "zustand";
 import {persist, devtools} from "zustand/middleware";
 
-interface User {
+export interface User {
   _id: string
   username: string
   name: string
@@ -16,7 +16,7 @@ interface User {
   githubProfileUrl?: string
   githubUsername?: string
   servers?: string[]
-  status: 'online' | 'offline' | 'idle' | 'dnd'
+  status: 'Online' | 'Offline' | 'Idle' | 'Dnd'
 }
 
 interface UserState {

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 axios.defaults.baseURL = API_URL + '/api/v1';
 axios.defaults.withCredentials = true;
@@ -12,9 +12,10 @@ export const getUserServers = async () => {
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }
 
@@ -28,9 +29,10 @@ export const createServer = async (serverData: { name: string; description?: str
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }
 
@@ -43,9 +45,10 @@ export const generateInvite = async (serverId: string, expiresAt?: string) => {
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }
 
@@ -58,9 +61,10 @@ export const joinServer = async (inviteCode: string) => {
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }
 
@@ -73,8 +77,9 @@ export const leaveServer = async (serverId: string) => {
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }

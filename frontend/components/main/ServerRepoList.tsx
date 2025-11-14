@@ -18,7 +18,7 @@ const ServerRepoList = () => {
       const getUserServersData = async () => {
         try {
           const response = await getUserServers();
-          const data = response.data;
+          const data = response?.data;
           console.log(data);
           if (data.success) {
             setServers(data.servers);

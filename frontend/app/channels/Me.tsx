@@ -1,12 +1,16 @@
 import { ActiveNow } from '@/components/main/ActiveNow'
 import DMList from '@/components/main/DMList'
 import { FriendsList } from '@/components/main/FriendsList'
+import useGetFriends from '@/hooks/useGetFriends';
 import useGetMe from '@/hooks/useGetMe';
+import useGetPendingRequests from '@/hooks/useGetPendingRequests';
 import { useUIStore } from '@/store/useUIStore';
 import { useEffect } from 'react';
 
 const Me = () => {
   useGetMe();
+  useGetFriends();
+  useGetPendingRequests();
   const {setTopBarText} = useUIStore();
   useEffect(() => {
     setTopBarText("Friends"); 

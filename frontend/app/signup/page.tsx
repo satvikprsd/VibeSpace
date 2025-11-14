@@ -34,7 +34,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       const response = await signUpUser(inputs);
-      const data = response.data;
+      const data = response?.data;
       if (data.success) {
         toast.success(data.message);
         setInputs({ username: "", email: "", password: "" });

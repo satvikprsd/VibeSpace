@@ -31,9 +31,10 @@ export const loginUser = async (credentials: { usernameoremail: string; password
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }
 
@@ -46,9 +47,10 @@ export const signUpUser = async (userData: { username: string; email: string; pa
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }
 
@@ -61,9 +63,58 @@ export const logoutUser = async () => {
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
+    }
+}
+
+export const sendFriendRequest = async (friendId: string) => {
+    try {
+        const response = await axios.post(`/users/friends/request/${friendId}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (err) {
+        const error = err as AxiosError;
+        console.error(error);
+        return error.response;
+    }
+}
+
+export const handleFriendRequest = async (requestId: string, action: 'accept' | 'reject') => {
+    try {
+        const response = await axios.post(`/users/friends/request/action/${requestId}`, { action }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (err) {
+        const error = err as AxiosError;
+        console.error(error);
+        return error.response;
+    }
+}
+
+export const getPendingFriendRequests = async () => {
+    try {
+        const response = await axios.get('/users/friends/requests/pending', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (err) {
+        const error = err as AxiosError;
+        console.error(error);
+        return error.response;
     }
 }
 
@@ -76,8 +127,9 @@ export const getFriends = async () => {
         });
         return response;
     }
-    catch (error) {
+    catch (err) {
+        const error = err as AxiosError;
         console.error(error);
-        throw error;
+        return error.response;
     }
 }
