@@ -2,6 +2,7 @@
 import CreateServerDialog from "@/components/CreateServerDialog";
 import { Dialog, DialogHeader } from "@/components/ui/dialog"
 import { getUserServers } from "@/services/serverService";
+import { useUIStore } from "@/store/useUIStore";
 import { PlusCircle } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
@@ -10,6 +11,7 @@ import { useEffect, useState } from "react";
 const ServerRepoList = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [servers, setServers] = useState<Array<{_id: string; name: string;}>>([]);
+  const {setTopBarText} = useUIStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const ServerRepoList = () => {
         </DialogHeader>
         <CreateServerDialog setIsOpen={setIsOpen} />
       </Dialog>
-      <div onClick={()=>router.push('/channels/@me')} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
+      <div onClick={()=>{router.push('/channels/@me')}} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
       <Image
         src="/logo.png"
         alt="Logo"
@@ -46,7 +48,7 @@ const ServerRepoList = () => {
       </div>
       {servers.map((server, id) => 
         (
-        <div key={id} onClick={()=> router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/channels/${server._id}`)} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
+        <div key={id} onClick={()=> {router.push(`/channels/${server._id}`);setTopBarText(server.name)}} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
           {server.name.charAt(0).toUpperCase()}
          </div>
         ))

@@ -70,7 +70,7 @@ export const logout = async (req, res)=>{
             secure: true,
             path: '/'
         });
-        res.redirect('http://localhost:3000/');
+        res.redirect('http://localhost:3000/login');
     } 
     catch (err) {
         console.log(err)
@@ -100,6 +100,21 @@ export const getMe = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         res.status(200).json({ success: true, user });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const getFriends = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId).populate({path: 'friends', select: '-password -friends -servers'});
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ success: true, friends: user.friends });
     }
     catch (error) {
         console.error(error);

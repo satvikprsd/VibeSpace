@@ -51,3 +51,33 @@ export const signUpUser = async (userData: { username: string; email: string; pa
         throw error;
     }
 }
+
+export const logoutUser = async () => {
+    try {
+        const response = await axios.get('/users/logout', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const getFriends = async () => {
+    try {
+        const response = await axios.get('/users/friends', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}

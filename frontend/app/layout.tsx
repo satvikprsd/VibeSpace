@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/theme-selector";
 import { Toaster } from "@/components/ui/sonner";
-import { Logout } from "@/components/logout-button";
+import UserProfile from "@/components/UserProfile";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,8 +40,8 @@ export default function RootLayout({
         <div className="fixed top-4 right-4 z-50">
           <ModeToggle />
         </div>
-         <div className="fixed bottom-4 left-4 z-50">
-          <Logout />
+         <div className="fixed bottom-2 left-2 z-50">
+          <UserProfile />
         </div>
         {children}
         <Toaster />

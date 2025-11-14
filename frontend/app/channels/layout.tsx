@@ -10,9 +10,6 @@ export default function MeLayout({
 }>) {
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="fixed bottom-4 left-4 z-50">
-        <Logout />
-      </div>
       <ServerRepoList />
       <main className="flex-1 flex">
         <div className="flex flex-col flex-1 bg-layer-1 min-h-screen">

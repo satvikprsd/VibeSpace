@@ -1,8 +1,16 @@
 import { ActiveNow } from '@/components/main/ActiveNow'
 import DMList from '@/components/main/DMList'
 import { FriendsList } from '@/components/main/FriendsList'
+import useGetMe from '@/hooks/useGetMe';
+import { useUIStore } from '@/store/useUIStore';
+import { useEffect } from 'react';
 
 const Me = () => {
+  useGetMe();
+  const {setTopBarText} = useUIStore();
+  useEffect(() => {
+    setTopBarText("Friends"); 
+  }, []);
   return (
     <div className="flex flex-1 border-l-2 border-t-2 border-border rounded-lg">
         <DMList />

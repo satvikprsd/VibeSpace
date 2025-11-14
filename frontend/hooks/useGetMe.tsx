@@ -1,4 +1,5 @@
 import { getMe } from "@/services/userService";
+import { useUserStore } from "@/store/useUserStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -6,6 +7,7 @@ import { toast } from "sonner";
 
 const useGetMe = () => {
     const router = useRouter();
+    const {setUser, setIsLoggedIn} = useUserStore();
     useEffect(() => {
         const fetchMe = async () => {
             try {
@@ -14,11 +16,20 @@ const useGetMe = () => {
                     console.log("No token found");
                     toast.warning("No active session found. Please login.");
                     router.push("/login");
-                    return;
+                    setIsLoggedIn(false);
+                    return;    
                 }
                 
                 const data = response?.data;
-                return data;
+                if (data.success) {
+                    setUser(data.user);
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                    toast.error(data.message || "Failed to fetch user data. Please login again.");
+                    router.push("/login");
+                }
+
             } catch (error) {
                 console.error(error);
                 throw error;

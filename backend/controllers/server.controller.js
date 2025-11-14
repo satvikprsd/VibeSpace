@@ -1,5 +1,6 @@
 import { Invite } from "../models/invite.model.js";
 import { Server } from "../models/server.model.js";
+import { User } from "../models/user.model.js";
 
 export const createServer = async (req, res) => {
     try {
@@ -9,13 +10,18 @@ export const createServer = async (req, res) => {
         if (!name || !ownerId) {
             return res.status(400).json({ message: 'Name and Owner ID are required' });
         }
-
+        const user = await User.findById(ownerId);
+        if (!user) {
+            return res.status(404).json({ message: 'Owner user not found' });
+        }
         const newServer = await Server.create({
             name,
             description,
             owner: ownerId,
             members: [ownerId]
         });
+        user.servers.push(newServer._id);
+        await user.save();
 
         res.status(201).json({ success: true, server: newServer, message: 'Server created successfully' });
     }
@@ -69,7 +75,10 @@ export const joinServer = async (req, res) => {
     try {
         const { inviteCode } = req.params;
         const userId = req.user.id;
-        
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
         const invite = await Invite.findOne({ code: inviteCode }).populate('server');
         if (!invite) {
             return res.status(404).json({ message: 'Invalid or Expired invite code' });
@@ -83,6 +92,9 @@ export const joinServer = async (req, res) => {
             return res.status(400).json({ message: 'User already a member of the server' });
         }
         
+        user.servers.push(server._id);
+        await user.save();
+
         server.members.push(userId);
         await server.save();
         
@@ -98,7 +110,10 @@ export const leaveServer = async (req, res) => {
     try {
         const { serverId } = req.params;
         const userId = req.user.id;
-        
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
         const server = await Server.findById(serverId);
         if (!server) {
             return res.status(404).json({ message: 'Server not found' });
@@ -109,6 +124,8 @@ export const leaveServer = async (req, res) => {
         }
         
         server.members = server.members.filter((memberId) => memberId.toString()!==userId);
+        user.servers = user.servers.filter((sId) => sId.toString()!==serverId);
+        await user.save();
         await server.save();
         
         res.status(200).json({ success: true, message: 'Left server successfully', server });

@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, logout, getProfile, getMe } from '../controllers/user.controller.js';
+import { register, login, logout, getProfile, getMe, getFriends } from '../controllers/user.controller.js';
 import { isAuth } from '../components/isAuth.js';
 
 const router = express.Router();
@@ -9,5 +9,6 @@ router.route('/login').post(login);
 router.route('/logout').get(logout);
 router.route('/profile/:username').get(isAuth, getProfile);
 router.route('/me').get(isAuth, getMe);
+router.route('/friends').get(isAuth, getFriends);
 
 export default router;
