@@ -77,7 +77,7 @@ export const githubAuthCallback = async (req, res) => {
             path: '/',
             maxAge: 30*24*60*60*1000
         });
-        res.redirect("http://localhost:3000/channels/@me");
+        res.redirect(`${process.env.FRONTEND_URL}/channels/@me`);
     }
     catch (error) {
         console.error(error);
