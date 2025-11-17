@@ -51,7 +51,7 @@ export const FriendsList = () => {
           <h2 className="text-lg font-semibold mb-3">Online — {onlineFriends.length}</h2> 
           <div className="space-y-2">
             {onlineFriends.map((f) => (
-              <div id={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
+              <div key={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
                 <UserRow key={f._id} user={f} />
               </div>
             ))}
@@ -61,7 +61,7 @@ export const FriendsList = () => {
           <h2 className="text-lg font-semibold mb-3">All friends — {friends.length}</h2> 
           <div className="space-y-2">
             {friends.map((f) => (
-              <div id={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
+              <div key={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
                 <UserRow key={f._id} user={f} />
               </div>
             ))}
@@ -75,7 +75,7 @@ export const FriendsList = () => {
               const f = isRequestSent ? request.to : request.from;
               console.log(f);
               return (
-                <div className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
+                <div key={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
                   <UserRow key={f._id} user={f} />
                   <div className="ml-auto">
                     {isRequestSent ? (

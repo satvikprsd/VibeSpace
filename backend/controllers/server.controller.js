@@ -1,5 +1,6 @@
 import { Invite } from "../models/invite.model.js";
 import { Server } from "../models/server.model.js";
+import { textChannel } from "../models/textChannel.model.js";
 import { User } from "../models/user.model.js";
 
 export const createServer = async (req, res) => {
@@ -14,16 +15,23 @@ export const createServer = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'Owner user not found' });
         }
-        const newServer = await Server.create({
+        const newServer = new Server({
             name,
             description,
             owner: ownerId,
             members: [ownerId]
         });
+        const generalChannel = await textChannel.create({
+            name: 'general',
+            server: newServer._id
+        })
+        newServer.defaultChannelId = generalChannel._id;
+        newServer.textChannels.push(generalChannel._id);
         user.servers.push(newServer._id);
         await user.save();
+        await newServer.save();
 
-        res.status(201).json({ success: true, server: newServer, message: 'Server created successfully' });
+        res.status(201).json({ success: true, server: {_id: newServer._id, name: newServer.name, description: newServer.name}, message: 'Server created successfully' });
     }
     catch (error) {
         console.error(error);
@@ -31,11 +39,39 @@ export const createServer = async (req, res) => {
     }
 }
 
+export const deleteServer = async (req, res) => {
+    try {
+        const { serverId } = req.params;
+        const userId = req.user.id;
+        const server = await Server.findById(serverId);
+        if (!server) {
+            return res.status(404).json({ message: 'Server not found' });
+        }
+        if (server.owner.toString() !== userId) {
+            return res.status(403).json({ message: 'Only the server owner can delete the server' });
+        }
+        await Server.findByIdAndDelete(serverId);
+        await textChannel.deleteMany({ server: serverId });
+        await Invite.deleteMany({ server: serverId });
+        
+        await User.updateMany(
+            { servers: serverId },
+            { $pull: { servers: serverId } }
+        );
+        res.status(200).json({ success: true, message: 'Server deleted successfully' });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
 export const getServerById = async (req, res) => {
     try {
         const { serverId } = req.params;
         
-        const server = await Server.findById(serverId).populate({ path: 'owner', select: '-password' }).populate({ path: 'members', select: '-password' });
+        const server = await Server.findById(serverId).populate({ path: 'owner', select: '-password' }).populate({ path: 'members', select: '-password' }).populate({ path: 'textChannels' });
         if (!server) {
             return res.status(404).json({ message: 'Server not found' });
         }
@@ -147,3 +183,54 @@ export const getUserServers = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+export const createTextChannel = async (req, res) => {
+    try {
+        const { serverId } = req.params;
+        const { name } = req.body;
+        const server = await Server.findById(serverId);
+        if (!server) {
+            return res.status(404).json({ message: 'Server not found' });
+        }
+        const newChannel = await textChannel.create({
+            name,
+            server: server._id
+        });
+        server.textChannels.push(newChannel._id);
+        await server.save();
+
+        res.status(201).json({ success: true, channel: newChannel, message: 'Text channel created successfully' });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const deleteTextChannel = async (req, res) => {
+    try {
+        const { channelId } = req.params;
+        const userId = req.user.id;
+        const channel = await textChannel.findById(channelId);
+        if (!channel) {
+            return res.status(404).json({ message: 'Text channel not found' });
+        }
+        const server = await Server.findById(channel.server);
+        if (!server) {
+            return res.status(404).json({ message: 'Server not found' });
+        }
+        if (server.owner.toString() !== userId) {
+            return res.status(403).json({ message: 'Only the server owner can delete text channels' });
+        }
+        await textChannel.findByIdAndDelete(channelId);
+        server.textChannels = server.textChannels.filter((chId) =>chId.toString()!==channelId);
+        await server.save();
+        
+        res.status(200).json({ success: true, message: 'Text channel deleted successfully' });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+

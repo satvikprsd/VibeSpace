@@ -19,6 +19,21 @@ export const getUserServers = async () => {
     }
 }
 
+export const getServerById = async (serverId: string) => {
+    try {
+        const response = await axios.get(`/servers/${serverId}/get`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (err) {
+        const error = err as AxiosError;
+        console.error(error);
+        return error.response;
+    }
+}
 
 export const createServer = async (serverData: { name: string; description?: string; }) => {
     try {
@@ -71,6 +86,22 @@ export const joinServer = async (inviteCode: string) => {
 export const leaveServer = async (serverId: string) => {
     try {
         const response = await axios.post('/leave', { serverId }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (err) {
+        const error = err as AxiosError;
+        console.error(error);
+        return error.response;
+    }
+}
+
+export const createTextChannel = async (serverId: string, channelData: { name: string; }) => {
+    try {
+        const response = await axios.post(`/servers/${serverId}/text-channel/create`, channelData, {
             headers: {
                 'Content-Type': 'application/json',
             },

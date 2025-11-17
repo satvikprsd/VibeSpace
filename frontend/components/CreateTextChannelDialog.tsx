@@ -1,24 +1,22 @@
-import { ChangeEvent, FormEvent, SetStateAction, use, useState } from "react";
+import { ChangeEvent, FormEvent, SetStateAction, useState } from "react";
 import { Button } from "./ui/button"
 import { DialogContent } from "./ui/dialog"
 import { Input } from "./ui/input"
 import Loader from "./ui/loader";
-import { createServer } from "@/services/serverService";
+import { createTextChannel } from "@/services/serverService";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { useUserStore } from "@/store/useUserStore";
+import { useServerStore } from "@/store/useServerStore";
 
 interface CreateServerProps {
   name: string;
-  description?: string;
 }
 
-const CreateServerDialog = ({setIsOpen} : {setIsOpen: React.Dispatch<SetStateAction<boolean>>}) => {
-  const {user, setUser} = useUserStore(); 
+const CreateTextChannelDialog = ({serverId, setIsOpen} : {serverId: string, setIsOpen: React.Dispatch<SetStateAction<boolean>>}) => {
   const [inputs, setInputs] = useState<CreateServerProps>({
-      name: "",
-      description: "",
+      name: ""
   });
+  const {server, setServer} = useServerStore();
 
   const [loading, setLoading] = useState(false);
 
@@ -26,22 +24,20 @@ const CreateServerDialog = ({setIsOpen} : {setIsOpen: React.Dispatch<SetStateAct
       setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  const ServerCreate = async (e: FormEvent<HTMLFormElement>) => {
+  const TextChannelCreate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
         try {
       setLoading(true);
-      const response = await createServer(inputs);
+      const response = await createTextChannel(serverId, inputs);
       const data = response?.data;
       console.log(response);
 
       if (data.success) {
         toast.success(data.message);
-        const newserver = data.server;
-        const updatedServers = [...(user?.servers || []), newserver];
-        setUser({...user!, servers: updatedServers});
+        const updatedServer = {...server!, textChannels: [...(server?.textChannels || []), data.channel]};
+        setServer(updatedServer);
         setInputs({
-          name: "",
-          description: "",
+          name: ""
         });
         setIsOpen(false);
       } else {
@@ -60,12 +56,11 @@ const CreateServerDialog = ({setIsOpen} : {setIsOpen: React.Dispatch<SetStateAct
 
   return (
     <DialogContent className="bg-card text-card-foreground rounded-2xl shadow-2xl w-[400px]! flex flex-col gap-6 p-8">
-      <form className="" onSubmit={ServerCreate}>
+      <form className="" onSubmit={TextChannelCreate}>
         <div className="flex flex-col gap-5">
           <h2 className="text-2xl font-bold">Create a New Server</h2>
 
-          <Input type="text" name="name" onChange={handleChange} value={inputs.name} placeholder="Server Name" className="border-2 border-layer-2" />
-          <Input type="text" name="description" onChange={handleChange} value={inputs.description} placeholder="Server Description" className="border-2 border-layer-2"/>
+          <Input type="text" name="name" onChange={handleChange} value={inputs.name} placeholder="Text Channel Name" className="border-2 border-layer-2" />
           <Button type="submit" className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/80 transition">
             {loading ? <Loader className="mb-5" /> : "Create Server"}
           </Button>
@@ -75,4 +70,4 @@ const CreateServerDialog = ({setIsOpen} : {setIsOpen: React.Dispatch<SetStateAct
   )
 }
 
-export default CreateServerDialog
+export default CreateTextChannelDialog

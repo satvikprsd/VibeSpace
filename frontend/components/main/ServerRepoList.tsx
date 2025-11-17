@@ -3,6 +3,7 @@ import CreateServerDialog from "@/components/CreateServerDialog";
 import { Dialog, DialogHeader } from "@/components/ui/dialog"
 import { getUserServers } from "@/services/serverService";
 import { useUIStore } from "@/store/useUIStore";
+import { useUserStore } from "@/store/useUserStore";
 import { PlusCircle } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
@@ -10,26 +11,9 @@ import { useEffect, useState } from "react";
 
 const ServerRepoList = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [servers, setServers] = useState<Array<{_id: string; name: string;}>>([]);
+  const {user} = useUserStore();
   const {setTopBarText} = useUIStore();
   const router = useRouter();
-
-  useEffect(() => {
-      const getUserServersData = async () => {
-        try {
-          const response = await getUserServers();
-          const data = response?.data;
-          console.log(data);
-          if (data.success) {
-            setServers(data.servers);
-          }
-        } catch (error) {
-          console.error("Failed to fetch user servers:", error);
-          setServers([]);
-        }
-      };
-      getUserServersData();
-  }, []);
 
   return (
     <div className="w-18 bg-layer-1 flex flex-col items-center py-8 space-y-3">
@@ -46,10 +30,10 @@ const ServerRepoList = () => {
         height={70}
       /> 
       </div>
-      {servers.map((server, id) => 
+      {user?.servers?.map((server) => 
         (
-        <div key={id} onClick={()=> {router.push(`/channels/${server._id}`);setTopBarText(server.name)}} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
-          {server.name.charAt(0).toUpperCase()}
+        <div key={server._id} onClick={()=> {router.push(`/channels/${server._id}`);setTopBarText(server.name!)}} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
+          {server.name!.charAt(0).toUpperCase()}
          </div>
         ))
       }

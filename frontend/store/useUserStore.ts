@@ -15,7 +15,11 @@ export interface User {
   githubId?: string
   githubProfileUrl?: string
   githubUsername?: string
-  servers?: string[]
+  servers?: Array<{
+    _id: string;
+    name?: string;
+    description?: string;
+  }>
   status: 'Online' | 'Offline' | 'Idle' | 'Dnd'
 }
 

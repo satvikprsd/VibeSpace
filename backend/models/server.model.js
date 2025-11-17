@@ -19,6 +19,10 @@ const serverSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    defaultChannelId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TextChannel',
+    },
     textChannels: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TextChannel'  

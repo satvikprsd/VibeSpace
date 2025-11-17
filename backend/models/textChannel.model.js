@@ -20,4 +20,4 @@ const textChannelSchema = new mongoose.Schema({
     }]
 });
 
-export const Channel = mongoose.model('Channel', textChannelSchema);
+export const textChannel= mongoose.model('TextChannel', textChannelSchema);

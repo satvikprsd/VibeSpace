@@ -33,7 +33,7 @@ export const login = async (req, res)=>{
         if (!usernameoremail || !password) {
             return res.status(400).json({message: 'Please fill all required fields'});
         }
-        const user = await User.findOne({$or: [{email: usernameoremail}, {username: usernameoremail}]});
+        const user = await User.findOne({$or: [{email: usernameoremail}, {username: usernameoremail}]})
         if (!user) {
             return res.status(400).json({message: 'User not found'});
         }
@@ -56,7 +56,7 @@ export const login = async (req, res)=>{
             secure: true, 
             path: '/',
             maxAge: 30*24*60*60*1000
-        }).status(200).json({success: true, message: 'Login successful', user: userData});
+        }).status(200).json({success: true, message: 'Login successful'});
     } catch (err) {
         console.log(err)
         res.status(500).json({message: 'Server error'});
@@ -96,7 +96,7 @@ export const getProfile = async (req, res)=>{
 export const getMe = async (req, res) => {
     try {
         const userId = req.user.id;
-        const user = await User.findById(userId).select('-password');
+        const user = await User.findById(userId).select('-password').populate({path: 'servers', select: '_id name description defaultChannelId'});
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
