@@ -71,7 +71,7 @@ export const getServerById = async (req, res) => {
     try {
         const { serverId } = req.params;
         
-        const server = await Server.findById(serverId).populate({ path: 'owner', select: '-password' }).populate({ path: 'members', select: '-password' }).populate({ path: 'textChannels' });
+        const server = await Server.findById(serverId).populate({ path: 'owner', select: '-password' }).populate({ path: 'members', select: 'username githubUsername name avatar status activity' }).populate({ path: 'textChannels' });
         if (!server) {
             return res.status(404).json({ message: 'Server not found' });
         }

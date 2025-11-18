@@ -1,5 +1,4 @@
 import "../globals.css";
-import { Logout } from "@/components/logout-button";
 import ServerRepoList from "@/components/main/ServerRepoList";
 import TopBar from "@/components/main/TopBar";
 

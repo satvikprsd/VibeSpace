@@ -33,7 +33,7 @@ const ServerRepoList = () => {
       {user?.servers?.map((server) => 
         (
         <div key={server._id} onClick={()=> {router.push(`/channels/${server._id}`);setTopBarText(server.name!)}} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
-          {server.name!.charAt(0).toUpperCase()}
+          {server.name?.charAt(0).toUpperCase()}
          </div>
         ))
       }

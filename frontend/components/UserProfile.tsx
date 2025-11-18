@@ -35,7 +35,7 @@ const UserProfile = () => {
                     <DropdownMenuTrigger className="p-2 rounded-lg hover:bg-layer-1/40 transition-colors duration-150 hover:cursor-pointer">
                         <Settings className="w-6 h-6" />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56" align="end">
+                    <DropdownMenuContent className="w-56 mb-3" align="end">
                         <DropdownMenuItem onClick={() => {
                             window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/users/logout";
                             setIsLoggedIn(false);
