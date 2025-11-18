@@ -72,7 +72,7 @@ export const logoutUser = async () => {
 
 export const sendFriendRequest = async (friendId: string) => {
     try {
-        const response = await axios.post(`/users/friends/request/${friendId}`, {}, {
+        const response = await axios.post(`/users/friends/requests/${friendId}`, {}, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -88,7 +88,7 @@ export const sendFriendRequest = async (friendId: string) => {
 
 export const handleFriendRequest = async (requestId: string, action: 'accept' | 'reject') => {
     try {
-        const response = await axios.post(`/users/friends/request/action/${requestId}`, { action }, {
+        const response = await axios.post(`/users/friends/requests/${requestId}/action`, { action }, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -121,6 +121,22 @@ export const getPendingFriendRequests = async () => {
 export const getFriends = async () => {
     try {
         const response = await axios.get('/users/friends', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (err) {
+        const error = err as AxiosError;
+        console.error(error);
+        return error.response;
+    }
+}
+
+export const updateStatus = async (status: string) => {
+    try {
+        const response = await axios.put('/users/me/status', { status }, {
             headers: {
                 'Content-Type': 'application/json',
             },

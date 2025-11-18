@@ -4,14 +4,13 @@ import { createServer, createTextChannel, deleteServer, generateInvite, getServe
 
 const router = Router();
 
-router.route("/create").post(isAuth, createServer);
-router.route("/:serverId/get").get(isAuth, getServerById);
-router.route("/all").get(isAuth, getUserServers);
+router.route("/").post(isAuth, createServer);
+router.route("/:serverId").get(isAuth, getServerById);
+router.route("/").get(isAuth, getUserServers);
 router.route("/:serverId/invite").post(isAuth, generateInvite);
-router.route("/:inviteCode/join").get(isAuth, joinServer);
+router.route("/join/:inviteCode").get(isAuth, joinServer);
 router.route("/:serverId/leave").get(isAuth, leaveServer);
-router.route("/:serverId/delete").delete(isAuth, deleteServer);
-router.route("/:serverId/text-channel/create").post(isAuth, createTextChannel);
-router.route("/:serverId/text-channel/:channelId/delete").delete(isAuth, deleteServer);
+router.route("/:serverId").delete(isAuth, deleteServer);
+router.route("/:serverId/text-channel").post(isAuth, createTextChannel);
 
 export default router;

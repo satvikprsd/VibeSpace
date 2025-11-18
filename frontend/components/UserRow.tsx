@@ -12,13 +12,17 @@ const UserRow = ({ user } : { user: User}) => {
                 width={200}
                 height={200}
             />
-            <span className="absolute bottom-0 right-0 w-3 h-3 bg-yellow-500 rounded-full border-2 border-layer-2"></span>
+            <span className={`absolute bottom-0 -right-1 w-3 h-3 rounded-full border-2 border-layer-2 ${
+                user?.status === 'Online' ? 'bg-green-500' :
+                user?.status === 'Idle' ? 'bg-yellow-500' :
+                user?.status === 'Dnd' ? 'bg-red-500' :
+                'bg-gray-500'
+            }`}/>
         </div>
 
 
         <div className="ml-2 flex-1">
             <p className="text-foreground text-sm font-medium">{user?.username || "user"}</p>
-            <p className="text-xs text-muted-foreground">{user?.status || "Idle"}</p>
         </div>
     </div>
   )

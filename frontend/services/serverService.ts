@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true;
 
 export const getUserServers = async () => {
     try {
-        const response = await axios.get('/servers/all', {
+        const response = await axios.get('/servers', {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -21,7 +21,7 @@ export const getUserServers = async () => {
 
 export const getServerById = async (serverId: string) => {
     try {
-        const response = await axios.get(`/servers/${serverId}/get`, {
+        const response = await axios.get(`/servers/${serverId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -37,7 +37,7 @@ export const getServerById = async (serverId: string) => {
 
 export const createServer = async (serverData: { name: string; description?: string; }) => {
     try {
-        const response = await axios.post('/servers/create', serverData, {
+        const response = await axios.post('/servers', serverData, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -69,7 +69,7 @@ export const generateInvite = async (serverId: string, expiresAt?: string) => {
 
 export const joinServer = async (inviteCode: string) => {
     try {
-        const response = await axios.post('/servers/join', { inviteCode }, {
+        const response = await axios.get(`/servers/join/${inviteCode}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -85,7 +85,7 @@ export const joinServer = async (inviteCode: string) => {
 
 export const leaveServer = async (serverId: string) => {
     try {
-        const response = await axios.post('/leave', { serverId }, {
+        const response = await axios.get(`/servers/${serverId}/leave`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -101,7 +101,7 @@ export const leaveServer = async (serverId: string) => {
 
 export const createTextChannel = async (serverId: string, channelData: { name: string; }) => {
     try {
-        const response = await axios.post(`/servers/${serverId}/text-channel/create`, channelData, {
+        const response = await axios.post(`/servers/${serverId}/text-channels`, channelData, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -114,3 +114,4 @@ export const createTextChannel = async (serverId: string, channelData: { name: s
         return error.response;
     }
 }
+

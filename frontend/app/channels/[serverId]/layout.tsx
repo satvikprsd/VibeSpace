@@ -15,7 +15,7 @@ const ServerLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="flex flex-1 border-l-2 border-t-2 border-border rounded-lg">
             <ChannelsList />
-            <div className="flex-1 bg-background p-4 overflow-y-auto">
+            <div className="flex-1 bg-background overflow-y-auto">
                 {children}
             </div>
             <MembersList />
