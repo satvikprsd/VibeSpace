@@ -19,6 +19,7 @@ import { toast } from "sonner";
 export function ProfileView() {
     const {user, setUser} = useUserStore();
     const {server, setServer} = useServerStore();
+    if (!user) return null;
     const handleStatusChange = async (status: 'Online' | 'Offline' | 'Idle' | 'Dnd') => {
         const response = await updateStatus(status);
         const data = response?.data;
@@ -84,7 +85,7 @@ export function ProfileView() {
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup className="bg-[#3a3c40] rounded-lg p-2">
-                <DropdownMenuItem onClick={()=>{navigator.clipboard.writeText(user?._id!);}}  className="bg-[#3a3c40]">
+                <DropdownMenuItem onClick={()=>{navigator.clipboard.writeText(user._id);}}  className="bg-[#3a3c40]">
                     Copy User ID
                 </DropdownMenuItem>
             </DropdownMenuGroup>

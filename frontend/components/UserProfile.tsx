@@ -31,11 +31,20 @@ const UserProfile = () => {
                         </div>
 
 
-                        <div className="ml-2 flex-1">
-                            <p className="text-foreground text-sm font-medium">{user?.username || "user"}</p>
-                            <p className="text-xs text-muted-foreground">{user?.status == 'Offline' ? 'Invisible' : user?.status || "Idle"}</p>
+                    <div className="ml-2 flex-1 group relative overflow-hidden">
+                        <p className="text-foreground text-sm font-medium">
+                            {user?.username || "user"}
+                        </p>
+                        <div className="relative h-4 mt-px">
+                            <p className="absolute inset-0 text-xs text-muted-foreground transition-all duration-300 ease-out backface-hidden transform-3d group-hover:rotate-x-90 group-hover:opacity-0">
+                                {user?.status === "Offline" ? "Invisible" : user?.status || "Idle"}
+                            </p>
+                            <p className="absolute inset-0 text-xs text-muted-foreground opacity-0 transition-all duration-300 ease-out backface-hidden transform-3d -rotate-x-90 group-hover:rotate-x-0 group-hover:opacity-100">
+                                {user?.username || "user"}
+                            </p>
                         </div>
                     </div>
+                </div>
                 </DropdownMenuTrigger>
                 <ProfileView />
             </DropdownMenu>

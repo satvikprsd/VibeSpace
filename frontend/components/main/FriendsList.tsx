@@ -45,7 +45,7 @@ export const FriendsList = () => {
           <TabsTrigger value="online" className="data-[state=active]:bg-layer-2! hover:bg-layer-2/70! h-8 text-base! p-3! transition-colors!">Online</TabsTrigger>
           <TabsTrigger value="all" className="data-[state=active]:bg-layer-2! hover:bg-layer-2/70! h-8 text-base! p-3! transition-colors!">All</TabsTrigger>
           {pendingRequests.length > 0 && <TabsTrigger value="pending" className="data-[state=active]:bg-layer-2! hover:bg-layer-2/70! h-8 text-base! p-3! transition-colors!">Pending</TabsTrigger>}
-          <TabsTrigger value="addfriend" className="bg-primary! data-[state=active]:bg-primary/20! data-[state=active]:text-primary/80! hover:bg-primary/70! h-8 text-base! p-3! transition-colors!">Add Friend</TabsTrigger>
+          <TabsTrigger value="addfriend" className="bg-primary! data-[state=active]:bg-primary/20! data-[state=active]:text-primary/80! hover:bg-primary/70! h-8 text-base! text-accent-foreground p-3! transition-colors!">Add Friend</TabsTrigger>
         </TabsList>
       <TabsContent value="online" className="mt-4">
           <h2 className="text-lg font-semibold mb-3">Online — {onlineFriends.length}</h2> 

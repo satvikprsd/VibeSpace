@@ -2,6 +2,7 @@ import { User } from "../models/user.model.js";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { InternalServerError } from "./user.controller.js";
 
 export const githubAuth = async (req, res) => {
     const redirectUri = process.env.BACKEND_URL + "/api/v1/auth/github/callback";
@@ -81,6 +82,6 @@ export const githubAuthCallback = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError});
     }
 }

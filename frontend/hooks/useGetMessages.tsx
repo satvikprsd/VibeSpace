@@ -7,9 +7,11 @@ import { toast } from "sonner";
 
 const useGetMessages = (channelId: string) => {
     const router = useRouter();
-    const { setMessages } = useTextChannelStore();
+    const { setMessages, setLoading } = useTextChannelStore();
     useEffect(() => {
         const fetchMessages = async () => {
+            setLoading(true);
+            setMessages([]);
             try {
                 const response = await getMessages(channelId);
                 const data = response?.data;
@@ -22,6 +24,9 @@ const useGetMessages = (channelId: string) => {
             } catch (error) {
                 console.error(error);
                 throw error;
+            }
+            finally {
+                setLoading(false);
             }
         }
         fetchMessages();

@@ -34,16 +34,16 @@ const ChannelPage = () => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-background">
-            <div className="sticky top-0 h-12.1 z-10 border-b border-border bg-background">
+        <div className="flex flex-col flex-1 bg-background min-h-0">
+            <div className="shrink-0 sticky top-0 h-12 z-10 border-b border-border bg-background">
                 <h2 className="text-base font-semibold text-foreground px-3 py-3 h-12 border-b border-border">
                     <Hash className="inline mr-2" />
                     {channel?.name || "Channel"}
                 </h2>
             </div>
             <ChatArea />
-            <div className="relative bottom-0 p-2 pt-0 w-full bg-background">
-                <Input onKeyDown={(e) => {if (e.key === 'Enter' && !e.shiftKey){e.preventDefault();handleSendMessage();}}} value={msg} onChange={(e) => setMsg(e.target.value)} className="h-15 bg-layer-1/40! w-full!"/>
+            <div className="relative bottom-0 p-2 pt-0 mt-px w-full bg-background">
+                <Input onKeyDown={(e) => {if (e.key === 'Enter' && !e.shiftKey){e.preventDefault();handleSendMessage();}}} value={msg} onChange={(e) => setMsg(e.target.value)} className="h-15 bg-layer-2! w-full!"/>
                 <SendHorizonal onClick={handleSendMessage} className="absolute right-7 bottom-7 w-5 h-5 text-foreground/70 hover:text-foreground cursor-pointer"/>
             </div>
         </div>

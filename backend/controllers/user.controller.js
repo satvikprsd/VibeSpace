@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import FriendRequest from "../models/friendRequest.model.js";
 
+export const InternalServerError = "Internal server error";
+
 export const register = async (req, res)=>{
     try {
         const {username, email, password, name} = req.body;
@@ -23,7 +25,7 @@ export const register = async (req, res)=>{
         res.status(201).json({success:true, message: 'User created successfully'});
     } catch (err) {
         console.log(err)
-        res.status(500).json({message: 'Server error'});
+        res.status(500).json({message: InternalServerError});
     }
 }
 
@@ -59,7 +61,7 @@ export const login = async (req, res)=>{
         }).status(200).json({success: true, message: 'Login successful'});
     } catch (err) {
         console.log(err)
-        res.status(500).json({message: 'Server error'});
+        res.status(500).json({message: InternalServerError});
     }
 }
 
@@ -75,7 +77,7 @@ export const logout = async (req, res)=>{
     } 
     catch (err) {
         console.log(err)
-        return res.status(500).json({success: false, message: 'Server error'});
+        return res.status(500).json({success: false, message: InternalServerError});
     }
 }
 
@@ -89,7 +91,7 @@ export const getProfile = async (req, res)=>{
         return res.status(200).json({success: true, user});
     } catch (err) {
         console.log(err)
-        return res.status(500).json({success: false, message: 'Server error'});
+        return res.status(500).json({success: false, message: InternalServerError});
     }
 }   
 
@@ -104,7 +106,7 @@ export const getMe = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -133,7 +135,7 @@ export const sendFriendRequest = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -173,7 +175,7 @@ export const handleFriendRequest = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -185,7 +187,7 @@ export const getPendingFriendRequests = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -200,7 +202,7 @@ export const getFriends = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -218,6 +220,6 @@ export const updateStatus = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }

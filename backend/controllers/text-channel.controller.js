@@ -1,6 +1,7 @@
 import { Message } from "../models/message.model.js";
 import { Server } from "../models/server.model.js";
 import { textChannel } from "../models/textChannel.model.js";
+import { InternalServerError } from "./user.controller.js";
 
 export const deleteTextChannel = async (req, res) => {
     try {
@@ -25,7 +26,7 @@ export const deleteTextChannel = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -57,7 +58,7 @@ export const sendMessageToChannel = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -80,6 +81,6 @@ export const getChannelMessages = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }

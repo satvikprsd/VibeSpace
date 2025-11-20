@@ -5,6 +5,7 @@ import { getUserServers } from "@/services/serverService";
 import { useUIStore } from "@/store/useUIStore";
 import { useUserStore } from "@/store/useUserStore";
 import { PlusCircle } from "lucide-react"
+import { useTheme } from "next-themes";
 import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ const ServerRepoList = () => {
   const {user} = useUserStore();
   const {setTopBarText} = useUIStore();
   const router = useRouter();
+  const {theme} = useTheme();
 
   return (
     <div className="w-18 bg-layer-1 flex flex-col items-center py-8 space-y-3">
@@ -26,8 +28,9 @@ const ServerRepoList = () => {
       <Image
         src="/logo.png"
         alt="Logo"
-        width={70}
-        height={70}
+        width={100}
+        height={100}
+        className={theme === 'dark' ? "invert" : ""}
       /> 
       </div>
       {user?.servers?.map((server) => 

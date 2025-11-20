@@ -2,6 +2,7 @@ import { Invite } from "../models/invite.model.js";
 import { Server } from "../models/server.model.js";
 import { textChannel } from "../models/textChannel.model.js";
 import { User } from "../models/user.model.js";
+import { InternalServerError } from "./user.controller.js";
 
 export const createServer = async (req, res) => {
     try {
@@ -35,7 +36,7 @@ export const createServer = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -62,7 +63,7 @@ export const deleteServer = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -80,7 +81,7 @@ export const getServerById = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -103,7 +104,7 @@ export const generateInvite = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -138,7 +139,7 @@ export const joinServer = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -168,7 +169,7 @@ export const leaveServer = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -180,7 +181,7 @@ export const getUserServers = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }
 
@@ -203,6 +204,6 @@ export const createTextChannel = async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: InternalServerError });
     }
 }

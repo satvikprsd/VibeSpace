@@ -3,9 +3,10 @@
 import { useTextChannelStore } from "@/store/useTextChannelStore";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import MessageSkeleton from "../skeletons/MessageSkeleton";
 
 export default function ChatArea() {
-  const { messages } = useTextChannelStore();
+  const { messages, loading } = useTextChannelStore();
   
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -18,8 +19,10 @@ export default function ChatArea() {
       return { ...msg, groupedWithPrevious: prev.sender?._id === msg.sender?._id && (new Date(msg.createdAt).getTime() - new Date(prev.createdAt).getTime())/(1000*60) < 2 };
   });
 
+  if (loading) return <MessageSkeleton />;
+    
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-6 text-foreground max-h-[calc(100vh-140px)] justify-end">
+    <div className="flex-1 overflow-y-auto px-4 py-6 text-foreground max-h-[calc(100vh-160px)] min-h-[calc(100vh-160px)] justify-end">
 
       {processed.length === 0 && (
         <div className="text-center text-foreground mt-10">

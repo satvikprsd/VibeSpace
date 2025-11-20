@@ -16,6 +16,8 @@ interface Message {
 interface TextChannelState {
     messages: Message[];
     setMessages: (messages: Message[]) => void;
+    loading: boolean;
+    setLoading: (loading: boolean) => void;
 }
 
 export const useTextChannelStore = create<TextChannelState>()(
@@ -24,6 +26,8 @@ export const useTextChannelStore = create<TextChannelState>()(
             (set) => ({
                 messages: [],
                 setMessages: (messages: Message[]) => set({messages}),
+                loading: false,
+                setLoading: (loading: boolean) => set({loading}),
             }),
             {
                 name: 'text-channel-storage',
