@@ -8,7 +8,6 @@ import { useUIStore } from '@/store/useUIStore';
 import { useEffect } from 'react';
 
 const Me = () => {
-  useGetMe();
   useGetFriends();
   useGetPendingRequests();
   const {setTopBarText} = useUIStore();

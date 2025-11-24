@@ -71,12 +71,14 @@ export const deleteServer = async (req, res) => {
 export const getServerById = async (req, res) => {
     try {
         const { serverId } = req.params;
-        
+        const userId = req.user.id;
         const server = await Server.findById(serverId).populate({ path: 'owner', select: '-password' }).populate({ path: 'members', select: 'username githubUsername name avatar status activity' }).populate({ path: 'textChannels', select: '_id name' });
         if (!server) {
             return res.status(404).json({ message: 'Server not found' });
         }
-        
+        if (!server.members.map(member => member._id.toString()).includes(userId)) {
+            return res.status(403).json({ message: 'Access denied. User is not a member of this server' });
+        }
         res.status(200).json({ success: true, server });
     }
     catch (error) {
@@ -88,25 +90,49 @@ export const getServerById = async (req, res) => {
 export const generateInvite = async (req, res) => {
     try {
         const { serverId } = req.params;
-        const { expiresAt } = req.body;
+        const { expiresAt, maxAge, maxUses } = req.body;
         const server = await Server.findById(serverId);
         if (!server) {
             return res.status(404).json({ message: 'Server not found' });
+        }
+        const existingInvite = await Invite.findOne({ server: serverId, createdBy: req.user.id, maxAge: maxAge, maxUses: maxUses, expiresAt: { $gt: new Date() } });
+        if (existingInvite) {
+            existingInvite.expiresAt = new Date(Date.now() + maxAge * 1000);
+            await existingInvite.save();
+            return res.status(200).json({ success: true, inviteCode: existingInvite.code, maxAge: existingInvite.maxAge, expiresAt: existingInvite.expiresAt });
         }
         const inviteCode = Math.random().toString(36).substring(2, 8).toUpperCase();
         const invite = await Invite.create({
             code: inviteCode,
             server: server._id,
+            maxAge: maxAge || 7*24*60*60,
+            maxUses: maxUses || null,
             createdBy: req.user.id,
-            expiresAt: expiresAt ? new Date(expiresAt) :new Date(Date.now() + 60*1000)
+            expiresAt: expiresAt ? new Date(expiresAt) :new Date(Date.now() + 7*24*60*60*1000)
         });
-        res.status(200).json({ success: true, inviteCode, expiresAt: invite.expiresAt });
+        res.status(200).json({ success: true, inviteCode, maxAge: invite.maxAge, maxUses: invite.maxUses, expiresAt: invite.expiresAt });
     }
     catch (error) {
         console.error(error);
         res.status(500).json({ message: InternalServerError });
     }
 }
+
+export const getInviteDetails = async (req, res) => {
+    try {
+        const { inviteCode } = req.params;
+        const invite = await Invite.findOne({ code: inviteCode }).populate([{path: 'server', select: 'name description members'}, {path: 'createdBy', select: 'username name avatar'}]);
+        if (!invite) {
+            return res.status(404).json({ message: 'Invalid or Expired invite code' });
+        }
+        res.status(200).json({ success: true, invite: { code: invite.code, server: invite.server, expiresAt: invite.expiresAt, maxUses: invite.maxUses, uses: invite.uses, createdBy: invite.createdBy } });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: InternalServerError });
+    }
+}
+
 
 export const joinServer = async (req, res) => {
     try {
@@ -126,7 +152,7 @@ export const joinServer = async (req, res) => {
         }
         
         if (server.members.includes(userId)) {
-            return res.status(400).json({ message: 'User already a member of the server' });
+            return res.status(200).json({ success: true, message: 'User already a member of the server', server });
         }
         
         user.servers.push(server._id);
@@ -134,6 +160,15 @@ export const joinServer = async (req, res) => {
 
         server.members.push(userId);
         await server.save();
+
+        if (invite.maxUses !== null) {
+            invite.uses += 1;
+            if (invite.uses >= invite.maxUses) {
+                await Invite.findByIdAndDelete(invite._id);
+            } else {
+                await invite.save();
+            }
+        }
         
         res.status(200).json({ success: true, message: 'Joined server successfully', server });
     }

@@ -5,10 +5,11 @@ import useGetMessages from "@/hooks/useGetMessages";
 import { sendMessage } from "@/services/textChannelService";
 import { useServerStore } from "@/store/useServerStore";
 import { useTextChannelStore } from "@/store/useTextChannelStore";
+import { useUIStore } from "@/store/useUIStore";
 import { useUserStore } from "@/store/useUserStore";
 import { Hash, SendHorizonal } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const ChannelPage = () => {
@@ -19,6 +20,14 @@ const ChannelPage = () => {
     const [msg, setMsg] = useState("");
     const {messages, setMessages} = useTextChannelStore();
     const {user} = useUserStore();
+    const {setTopBarText} = useUIStore();
+    useEffect(() => {
+        if (server?._id === "%40me") {
+            setTopBarText("Friends");
+        } else if (server) {
+            setTopBarText(server.name || "Server");
+        }
+    }, [server, setTopBarText]);
 
     const handleSendMessage = async () => {
         const response = await sendMessage(channelId as string, { content: msg });

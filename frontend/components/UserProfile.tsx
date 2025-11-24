@@ -55,7 +55,7 @@ const UserProfile = () => {
                         <Settings className="w-6 h-6" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56 mb-3" align="end">
-                        <DropdownMenuItem onClick={() => {
+                        <DropdownMenuItem className="text-foreground hover:bg-muted-foreground/10! hover:text-foreground!" onClick={() => {
                             window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/users/logout";
                             setIsLoggedIn(false);
                             clearUser();

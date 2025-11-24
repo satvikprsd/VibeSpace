@@ -1,4 +1,4 @@
-import "../globals.css";
+import "../../globals.css";
 import ServerRepoList from "@/components/main/ServerRepoList";
 import TopBar from "@/components/main/TopBar";
 

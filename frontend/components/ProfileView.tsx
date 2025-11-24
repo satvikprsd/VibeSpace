@@ -2,10 +2,8 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -13,6 +11,7 @@ import {
 import { updateStatus } from "@/services/userService";
 import { useServerStore } from "@/store/useServerStore";
 import { useUserStore } from "@/store/useUserStore";
+import { Pencil } from "lucide-react";
 import Image from "next/image"
 import { toast } from "sonner";
 
@@ -40,9 +39,9 @@ export function ProfileView() {
     }
 
   return (
-      <DropdownMenuContent className="flex-1 pb-2 w-65 px-0! pt-0!  bg-[#2b2d31] rounded-xl shadow-xl mb-2 text-white font-sans" align="start">
+      <DropdownMenuContent className="flex-1 pb-2 w-65 px-0! pt-0!  bg-layer-2 rounded-xl shadow-xl mb-2 text-foreground font-sans" align="start">
         <div className="h-45">
-            <div className="h-25 w-full bg-[#3a3c40] rounded-t-lg mb-10"></div>
+            <div className="h-25 w-full bg-[#54575c] rounded-t-lg mb-10"></div>
                 <div className="relative -mt-20 px-2">
                     <div className="absolute">
                     <Image
@@ -62,30 +61,39 @@ export function ProfileView() {
                 </div>
                 <div className="mt-30 px-2">
                     <h2 className="text-xl font-semibold">{user?.username}</h2>
-                    <p className="text-gray-400 text-sm">{user?.name}</p>
+                    <p className="text-sm">{user?.name}</p>
             </div>
         </div>
         <DropdownMenuSeparator />
         <div className="px-2 pt-2 space-y-3">
-            <DropdownMenuGroup className="bg-[#3a3c40] rounded-lg p-2">
+            <DropdownMenuGroup className="bg-layer-2/40 border border-foreground/20 rounded-lg p-2">
                 <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="bg-[#3a3c40]">Status</DropdownMenuSubTrigger>
+                    <DropdownMenuSubTrigger className="text-foreground hover:bg-muted-foreground/10! hover:text-foreground!">
+                        <span className={`w-3 h-3 mx-1 rounded-full ${
+                            user?.status === 'Online' ? 'bg-green-500' :
+                            user?.status === 'Idle' ? 'bg-yellow-500' :
+                            user?.status === 'Dnd' ? 'bg-red-500' :
+                            'bg-gray-500'
+                        }`}/>
+                        {user.status === "Offline" ? "Invisible" : user.status}
+                    </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
-                    <DropdownMenuSubContent className="ml-3">
-                        <DropdownMenuItem onClick={()=>handleStatusChange('Online')}>Online</DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=>handleStatusChange('Idle')}>Idle</DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=>handleStatusChange('Dnd')}>DND</DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=>handleStatusChange('Offline')}>Invisible</DropdownMenuItem>
-                    </DropdownMenuSubContent>
+                        <DropdownMenuSubContent className="ml-3">
+                            <DropdownMenuItem onClick={()=>handleStatusChange('Online')}>Online</DropdownMenuItem>
+                            <DropdownMenuItem onClick={()=>handleStatusChange('Idle')}>Idle</DropdownMenuItem>
+                            <DropdownMenuItem onClick={()=>handleStatusChange('Dnd')}>DND</DropdownMenuItem>
+                            <DropdownMenuItem onClick={()=>handleStatusChange('Offline')}>Invisible</DropdownMenuItem>
+                        </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                 </DropdownMenuSub>
                 <DropdownMenuSeparator className="bg-foreground/30 mx-1 my-2" />
-                <DropdownMenuItem className="bg-[#3a3c40]">
+                <DropdownMenuItem className="text-foreground hover:bg-muted-foreground/10! hover:text-foreground!">
+                    <Pencil className="mr-1 h-4 w-4" />
                     Edit Profile
                 </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuGroup className="bg-[#3a3c40] rounded-lg p-2">
-                <DropdownMenuItem onClick={()=>{navigator.clipboard.writeText(user._id);}}  className="bg-[#3a3c40]">
+            <DropdownMenuGroup className="bg-layer-2/40 border border-foreground/20 rounded-lg p-2">
+                <DropdownMenuItem onClick={()=>{navigator.clipboard.writeText(user._id);}}  className="text-foreground hover:bg-muted-foreground/10! hover:text-foreground!">
                     Copy User ID
                 </DropdownMenuItem>
             </DropdownMenuGroup>

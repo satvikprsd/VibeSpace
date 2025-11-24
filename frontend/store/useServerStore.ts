@@ -15,7 +15,7 @@ interface TextChannel {
     messages: Array<Message>;
 }
 
-interface Server {
+export interface Server {
     _id: string;
     name?: string;
     description?: string;
