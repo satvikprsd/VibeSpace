@@ -5,9 +5,10 @@ import { Settings } from "lucide-react";
 import Image from "next/image";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { ProfileView } from "./ProfileView";
+import { resestStores } from "@/store/resetStores";
 
 const UserProfile = () => {
-    const {user, isLoggedIn, setIsLoggedIn, clearUser} = useUserStore();
+    const {user, isLoggedIn, setIsLoggedIn} = useUserStore();
     if (!isLoggedIn) return null;
     return (
         <div className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-84">
@@ -55,10 +56,10 @@ const UserProfile = () => {
                         <Settings className="w-6 h-6" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56 mb-3" align="end">
-                        <DropdownMenuItem onClick={() => {
-                            window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/users/logout";
+                        <DropdownMenuItem className="text-foreground hover:bg-muted-foreground/10! hover:text-foreground!" onClick={() => {
+                            window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/auth/logout";
                             setIsLoggedIn(false);
-                            clearUser();
+                            resestStores();
                         }}>
                             Log out 
                             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

@@ -95,6 +95,7 @@ html, body {
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: #4b5563 #1f1f1f;
+  overscroll-behavior: none;
 }
 
 @keyframes fadeIn {

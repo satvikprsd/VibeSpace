@@ -1,0 +1,16 @@
+"use client";
+
+import ProtectdLayout from "@/components/ProtectedLayout";
+
+const JoinLayout = ({ children }: { children: React.ReactNode }) => {
+
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+            <ProtectdLayout>
+                {children}
+            </ProtectdLayout>
+        </div>
+    );
+};
+
+export default JoinLayout;

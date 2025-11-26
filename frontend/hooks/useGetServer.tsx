@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 const useGetServer = (serverId: string) => {
     const router = useRouter();
-    const {setServer, servers} = useServerStore();
+    const {addServer, servers} = useServerStore();
     useEffect(() => {
         const fetchServer = async () => {
             try {
@@ -15,7 +15,7 @@ const useGetServer = (serverId: string) => {
                 const data = response?.data;
                 if (data.success) {
                     router.push(`/channels/${serverId}/${data.server.defaultChannelId}`);
-                    setServer(data.server);
+                    addServer(data.server);
                 } else {
                     toast.error(data.message || "Failed to fetch server.");
                 }
@@ -26,11 +26,11 @@ const useGetServer = (serverId: string) => {
         }
         if (!serverId || serverId === "%40me") return;
         if (servers[serverId]) {
-            setServer(servers[serverId]);
+            addServer(servers[serverId]);
             return;
         }
         fetchServer();
-    }, [router, serverId, setServer, servers]);   
+    }, [router, serverId]);   
 }
 
 export default useGetServer;

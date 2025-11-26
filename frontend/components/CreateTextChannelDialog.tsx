@@ -16,7 +16,8 @@ const CreateTextChannelDialog = ({serverId, setIsOpen} : {serverId: string, setI
   const [inputs, setInputs] = useState<CreateServerProps>({
       name: ""
   });
-  const {server, setServer} = useServerStore();
+  const {servers, setServers} = useServerStore();
+  const server = servers[serverId];
 
   const [loading, setLoading] = useState(false);
 
@@ -30,12 +31,13 @@ const CreateTextChannelDialog = ({serverId, setIsOpen} : {serverId: string, setI
       setLoading(true);
       const response = await createTextChannel(serverId, inputs);
       const data = response?.data;
-      console.log(response);
+      //console.log(response);
 
       if (data.success) {
         toast.success(data.message);
         const updatedServer = {...server!, textChannels: [...(server?.textChannels || []), data.channel]};
-        setServer(updatedServer);
+        const updatedServers = {...servers, [serverId]: updatedServer};
+        setServers(updatedServers);
         setInputs({
           name: ""
         });

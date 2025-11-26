@@ -1,22 +1,22 @@
 "use client";
 import CreateServerDialog from "@/components/CreateServerDialog";
 import { Dialog, DialogHeader } from "@/components/ui/dialog"
-import { getUserServers } from "@/services/serverService";
 import { useUIStore } from "@/store/useUIStore";
 import { useUserStore } from "@/store/useUserStore";
 import { PlusCircle } from "lucide-react"
 import { useTheme } from "next-themes";
 import Image from "next/image"
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const ServerRepoList = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {user} = useUserStore();
-  const {setTopBarText} = useUIStore();
   const router = useRouter();
-  const {theme} = useTheme();
+  const {theme, systemTheme} = useTheme();
+  if (!theme) return null;
 
+  const currentTheme = theme === "system" ? systemTheme : theme;
   return (
     <div className="w-18 bg-layer-1 flex flex-col items-center py-8 space-y-3">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -30,12 +30,12 @@ const ServerRepoList = () => {
         alt="Logo"
         width={100}
         height={100}
-        className={theme === 'dark' ? "invert" : ""}
+        className={currentTheme === 'dark' ? "invert" : ""}
       /> 
       </div>
       {user?.servers?.map((server) => 
         (
-        <div key={server._id} onClick={()=> {router.push(`/channels/${server._id}`);setTopBarText(server.name!)}} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
+        <div key={server._id} onClick={()=> {router.push(`/channels/${server._id}/${server.defaultChannelId}`);}} className="h-12 w-12 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold hover:cursor-pointer hover:rounded-2xl hover:bg-primary/80 active:translate-y-1 transition">
           {server.name?.charAt(0).toUpperCase()}
          </div>
         ))

@@ -7,6 +7,7 @@ import userRoutes from './routes/user.route.js';
 import serverRoutes from './routes/server.route.js';
 import authRoutes from './routes/auth.route.js';
 import textChannelRoutes from './routes/text-channel.route.js';
+import convoRoutes from './routes/convo.route.js';
 
 dotenv.config();
 
@@ -26,10 +27,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/servers', serverRoutes);
 app.use('/api/v1/text-channels', textChannelRoutes);
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/convos', convoRoutes);
+
 
 app.listen(PORT,()=>{
     connectDB();

@@ -2,6 +2,13 @@ import { de } from "zod/locales";
 import {create} from "zustand";
 import {persist, devtools} from "zustand/middleware";
 
+interface Server {
+    _id: string;
+    name?: string;
+    description?: string;
+    defaultChannelId?: string;
+}
+
 export interface User {
   _id: string
   username: string
@@ -15,11 +22,7 @@ export interface User {
   githubId?: string
   githubProfileUrl?: string
   githubUsername?: string
-  servers?: Array<{
-    _id: string;
-    name?: string;
-    description?: string;
-  }>
+  servers?: Server[]
   status: 'Online' | 'Offline' | 'Idle' | 'Dnd'
 }
 
@@ -28,7 +31,7 @@ interface UserState {
     isLoggedIn: boolean;
     setUser: (user: User | null) => void;
     setIsLoggedIn: (loggedIn: boolean) => void;
-    clearUser: () => void;
+    logout: () => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -39,7 +42,7 @@ export const useUserStore = create<UserState>()(
                 isLoggedIn: false,
                 setUser: (user: User | null) => set({user}),
                 setIsLoggedIn: (isLoggedIn: boolean) => set({isLoggedIn}),
-                clearUser: () => set({user: null}),
+                logout: () => set({user: null}),
             }),
             {
                 name: "user-storage",

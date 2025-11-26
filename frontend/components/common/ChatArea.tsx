@@ -1,13 +1,11 @@
 "use client";
 
-import { useTextChannelStore } from "@/store/useTextChannelStore";
+import { Message } from "@/store/useTextChannelStore";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 
-export default function ChatArea() {
-  const { messages, loading } = useTextChannelStore();
-  
+export default function ChatArea({messages, loading}: {messages: Message[]; loading: boolean;}) {
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,13 +35,13 @@ export default function ChatArea() {
           return (
             <div key={index}>
               <DateDivider date={dateString} />
-              <Message avatar={msg.sender?.avatar} username={msg.sender?.username} time={new Date(msg.createdAt).toLocaleTimeString("en-IN", {hour: "2-digit",minute: "2-digit",hour12: false})} message={msg.message} grouped={msg.groupedWithPrevious}/>
+              <ChatMessage avatar={msg.sender?.avatar} username={msg.sender?.username} time={new Date(msg.createdAt).toLocaleTimeString("en-IN", {hour: "2-digit",minute: "2-digit",hour12: false})} message={msg.message} grouped={msg.groupedWithPrevious}/>
             </div>
           );
         }
 
         return (
-          <Message key={index} avatar={msg.sender?.avatar} username={msg.sender?.username} time={new Date(msg.createdAt).toLocaleTimeString("en-IN", {hour: "2-digit",minute: "2-digit",hour12: false})} message={msg.message} grouped={msg.groupedWithPrevious}/>
+          <ChatMessage key={index} avatar={msg.sender?.avatar} username={msg.sender?.username} time={new Date(msg.createdAt).toLocaleTimeString("en-IN", {hour: "2-digit",minute: "2-digit",hour12: false})} message={msg.message} grouped={msg.groupedWithPrevious}/>
         )})}
       <div ref={bottomRef} />
     </div>
@@ -51,7 +49,7 @@ export default function ChatArea() {
 }
 
 
-function Message({avatar, username, time, message, grouped}: {avatar: string; username: string; time: string; message: string;grouped: boolean;}) {
+function ChatMessage({avatar, username, time, message, grouped}: {avatar: string; username: string; time: string; message: string;grouped: boolean;}) {
   return (
     <div className={`flex items-start mb-0 ${grouped ? "pl-14" : "gap-4 mt-4"}`}>
       {!grouped && (

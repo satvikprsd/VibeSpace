@@ -51,9 +51,9 @@ export const createServer = async (serverData: { name: string; description?: str
     }
 }
 
-export const generateInvite = async (serverId: string, expiresAt?: string) => {
+export const generateInvite = async (serverId: string, expiresAt?: string, maxAge?: number, maxUses?: number | null) => {
     try {
-        const response = await axios.post(`/servers/${serverId}/invite`, { expiresAt }, {
+        const response = await axios.post(`/servers/${serverId}/invite`, { expiresAt, maxAge, maxUses }, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -66,6 +66,23 @@ export const generateInvite = async (serverId: string, expiresAt?: string) => {
         return error.response;
     }
 }
+
+export const getInviteDetails = async (inviteCode: string) => {
+    try {
+        const response = await axios.get(`/servers/invite/${inviteCode}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
+    catch (err) {
+        const error = err as AxiosError;
+        console.error(error);
+        return error.response;
+    }
+}
+
 
 export const joinServer = async (inviteCode: string) => {
     try {

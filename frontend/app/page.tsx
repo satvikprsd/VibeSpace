@@ -1,16 +1,18 @@
 "use client";
 import { useUserStore } from "@/store/useUserStore";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Home() {
   const {isLoggedIn} = useUserStore();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isLoggedIn) {
-      window.location.href = "/login";
+      router.push("/login");
     }
     else {
-      window.location.href = "/channels/@me";
+      router.push("/channels/@me");
     }
   }, [isLoggedIn]);
 

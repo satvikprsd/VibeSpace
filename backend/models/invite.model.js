@@ -11,6 +11,18 @@ const inviteSchema = new mongoose.Schema({
         ref: 'Server',
         required: true
     },
+    maxAge: {
+        type: Number,
+        default: 7*24*60*60 
+    },
+    maxUses: {
+        type: Number,
+        default: null 
+    },
+    uses: {
+        type: Number,
+        default: 0
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

@@ -1,12 +1,11 @@
 import express from 'express';
-import { register, login, logout, getProfile, getMe, getFriends, sendFriendRequest, handleFriendRequest, getPendingFriendRequests, updateStatus } from '../controllers/user.controller.js';
+import { getProfile, getMe, updateStatus } from '../controllers/user.controller.js';
 import { isAuth } from '../components/isAuth.js';
+import { getFriends, getPendingFriendRequests, handleFriendRequest, sendFriendRequest } from '../controllers/friend.controller.js';
 
 const router = express.Router();
 
-router.route('/register').post(register);
-router.route('/login').post(login);
-router.route('/logout').get(isAuth, logout);
+
 
 router.route('/me').get(isAuth, getMe);
 router.route('/me/status').put(isAuth, updateStatus);
