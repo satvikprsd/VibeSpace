@@ -26,20 +26,25 @@ export interface Server {
 }
 
 interface ServerState {
-    server: Server | null;
     servers: Record<string, Server>;
     setServers: (servers: ServerState['servers']) => void;
-    setServer: (server: ServerState['server']) => void;
+    addServer: (server: Server) => void;
+    logout: () => void;
 }
 
 export const useServerStore = create<ServerState>()(
     devtools(
         persist(
             (set) => ({
-                server: null,
-                setServer: (server: ServerState['server']) => set({server}),
                 servers: {},
                 setServers: (servers: ServerState['servers']) => set({servers}),
+                addServer: (server: Server) => set((state) => ({
+                    servers: {
+                        ...state.servers,
+                        [server._id]: server,
+                    },
+                })),
+                logout: () => set({ servers: {} }),
             }),
             {
                 name: 'server-storage',

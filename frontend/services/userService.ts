@@ -15,7 +15,6 @@ export const getMe = async () => {
     catch (err) {
         const error = err as AxiosError;
         if (error.response?.status === 401) {
-            console.log("Unauthorized");
             return { status: 401, data: null };
         }
         console.error(error);
@@ -24,7 +23,7 @@ export const getMe = async () => {
 }
 export const loginUser = async (credentials: { usernameoremail: string; password: string; }) => {
     try {
-        const response = await axios.post('/users/login', credentials, {
+        const response = await axios.post('/auth/login', credentials, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -40,7 +39,7 @@ export const loginUser = async (credentials: { usernameoremail: string; password
 
 export const signUpUser = async (userData: { username: string; email: string; password: string; }) => {
     try {
-        const response = await axios.post('/users/register', userData, {
+        const response = await axios.post('/auth/register', userData, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -56,7 +55,7 @@ export const signUpUser = async (userData: { username: string; email: string; pa
 
 export const logoutUser = async () => {
     try {
-        const response = await axios.get('/users/logout', {
+        const response = await axios.get('/auth/logout', {
             headers: {
                 'Content-Type': 'application/json',
             },

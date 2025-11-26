@@ -3,16 +3,18 @@ import { ChevronDown, Hash, Plus } from "lucide-react"
 import { Dialog } from "../ui/dialog";
 import CreateTextChannelDialog from "../CreateTextChannelDialog";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { ServerDropdown } from "../ServerDropdown";
 import CreateServerInviteDialog from "../CreateServerInviteDialog";
 
 const ChannelsList = () => {
-  const { server } = useServerStore();
+  const { servers } = useServerStore();
   const router = useRouter();
+  const { serverId, channelId} = useParams() as { serverId: string; channelId: string };
   const [isCreateChannelOpen, setIsCreateChannelOpen] = useState(false);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+  const server = servers[serverId];
 
   return (
     <div className="w-70 bg-layer-1 flex flex-col rounded-lg">
@@ -25,8 +27,8 @@ const ChannelsList = () => {
       <div className="flex-1 overflow-y-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="flex justify-between border-b border-border hover:cursor-pointer hover:bg-layer-2/40 transition-colors duration-150 items-center">
-              <h2 className="text-base font-semibold text-foreground px-3 py-3 h-12 border-b border-border">{server?.name}</h2>
+            <div className="flex justify-between border-b border-border hover:cursor-pointer hover:bg-layer-2/40 transition-colors duration-150 items-center max-h-12">
+              <h2 className="text-base font-semibold text-foreground px-3 py-3 h-12">{server?.name}</h2>
               <ChevronDown className=" mr-3" />
             </div>
           </DropdownMenuTrigger>
@@ -41,7 +43,7 @@ const ChannelsList = () => {
             <div
               key={channel._id}
               onClick={() => router.push(`/channels/${server._id}/${channel._id}`)}
-              className="flex px-3 py-2 text-foreground/90 hover:bg-layer-2 transition-colors duration-150 rounded cursor-pointer"
+              className={`flex m-2 px-2 py-2  text-foreground/90 hover:bg-layer-2 ${channel._id == channelId ? 'bg-layer-2' : ''} transition-colors duration-150 rounded-xl cursor-pointer`}
             >
               <Hash />
               <div className="ml-2">{channel.name}</div>

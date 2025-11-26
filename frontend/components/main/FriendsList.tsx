@@ -7,11 +7,16 @@ import { handleFriendRequest, sendFriendRequest } from "@/services/userService";
 import { toast } from "sonner";
 import UserRow from "../UserRow";
 import { useUserStore } from "@/store/useUserStore";
+import { createOrGetConvo } from "@/services/convoService";
+import { useRouter } from "next/navigation";
+import { useDMStore } from "@/store/useDMStore";
 
 export const FriendsList = () => {
   const {friends, pendingRequests} = useFriendsStore();
   const {user} = useUserStore();
+  const { addDM, dms } = useDMStore();
   // console.log(friends);/
+  const router = useRouter();
   const onlineFriends = friends.filter(friend => friend.status != 'Offline');
   const [sendRequest, setSendRequest] = useState(''); 
 
@@ -37,9 +42,29 @@ export const FriendsList = () => {
     }
   };
 
+  const handleConvo = async (friendId : string) => {
+    if (!user) return;
+    if (Object.values(dms).some(dm => dm.participants.some(participant => participant._id === friendId))) {
+      const existingDM = Object.values(dms).find(dm => dm.participants.some(participant => participant._id === friendId));
+      router.push(`/channels/@me/${existingDM?._id}`);
+      return;
+    }
+
+    const response = await createOrGetConvo(friendId);
+    const data = response?.data;
+    if (data.success) {
+      if (!dms[data.convo._id]) {
+        addDM(data.convo);
+      }
+      router.push(`/channels/@me/${data.convo._id}`);
+    }
+    else {
+      toast.error(data?.message || "Failed to create or get convo.");
+    }
+  };
 
   return (
-    <div>
+    <div className="p-4">
       <Tabs defaultValue="online">
         <TabsList className="bg-background flex space-x-2 p-1 rounded">
           <TabsTrigger value="online" className="data-[state=active]:bg-layer-2! hover:bg-layer-2/70! h-8 text-base! p-3! transition-colors!">Online</TabsTrigger>
@@ -53,6 +78,7 @@ export const FriendsList = () => {
             {onlineFriends.map((f) => (
               <div key={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
                 <UserRow key={f._id} user={f} />
+                <MessageCircle onClick={() => handleConvo(f._id)} className="ml-auto w-5 h-5 text-foreground/70 hover:text-foreground cursor-pointer"/>
               </div>
             ))}
           </div>
@@ -63,6 +89,7 @@ export const FriendsList = () => {
             {friends.map((f) => (
               <div key={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
                 <UserRow key={f._id} user={f} />
+                <MessageCircle onClick={() => handleConvo(f._id)} className="ml-auto w-5 h-5 text-foreground/70 hover:text-foreground cursor-pointer"/>
               </div>
             ))}
           </div>
@@ -73,7 +100,6 @@ export const FriendsList = () => {
             {pendingRequests?.map((request) => {
               const isRequestSent = request.from._id === user?._id;
               const f = isRequestSent ? request.to : request.from;
-              console.log(f);
               return (
                 <div key={f._id} className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-full hover:bg-layer-1/50 transition-colors duration-150">
                   <UserRow key={f._id} user={f} />

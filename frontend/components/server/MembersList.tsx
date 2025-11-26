@@ -1,9 +1,11 @@
 import { useServerStore } from "@/store/useServerStore";
 import UserRow from "../UserRow";
+import { useParams } from "next/navigation";
 
 const MembersList = () => {
-  const { server } = useServerStore();
-
+  const { servers } = useServerStore();
+  const { serverId } = useParams() as { serverId: string };
+  const server = servers[serverId];
   const onlineUsers = server?.members?.filter(member => member.status != 'Offline') || [];
   const offlineUsers = server?.members?.filter(member => member.status === 'Offline') || [];
 

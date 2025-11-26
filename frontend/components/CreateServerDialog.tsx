@@ -32,7 +32,7 @@ const CreateServerDialog = ({setIsOpen} : {setIsOpen: React.Dispatch<SetStateAct
       setLoading(true);
       const response = await createServer(inputs);
       const data = response?.data;
-      console.log(response);
+      //console.log(response);
 
       if (data.success) {
         toast.success(data.message);

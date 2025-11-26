@@ -31,7 +31,7 @@ interface UserState {
     isLoggedIn: boolean;
     setUser: (user: User | null) => void;
     setIsLoggedIn: (loggedIn: boolean) => void;
-    clearUser: () => void;
+    logout: () => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -42,7 +42,7 @@ export const useUserStore = create<UserState>()(
                 isLoggedIn: false,
                 setUser: (user: User | null) => set({user}),
                 setIsLoggedIn: (isLoggedIn: boolean) => set({isLoggedIn}),
-                clearUser: () => set({user: null}),
+                logout: () => set({user: null}),
             }),
             {
                 name: "user-storage",

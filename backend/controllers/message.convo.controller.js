@@ -4,7 +4,7 @@ import { Message } from "../models/message.model.js";
 export const getMessages = async (req, res) => {
     try {
         const convoId = req.params.convoId;
-        const convo = await Convo.findById(convoId).populate([{path: 'messages.sender', select: '-password' }]);
+        const convo = await Convo.findById(convoId).populate({path: "messages", populate: {path: "sender", select: "name username avatar githubId githubUsername"}});
         if (!convo) {
             return res.status(404).json({ message: 'Conversation not found' });
         }
@@ -29,7 +29,7 @@ export const sendMessage = async (req, res) => {
         const newMessage = await Message.create({
             sender: userId,
             origin: 'directMessage',
-            receiver: recipientId,
+            convo: convoId,
             message: content
         });
         convo.messages.push(newMessage._id);

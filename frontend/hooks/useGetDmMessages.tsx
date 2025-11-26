@@ -1,27 +1,30 @@
-import { getMessages } from "@/services/textChannelService";
-import { useTextChannelStore } from "@/store/useTextChannelStore";
+import { getMessages } from "@/services/convoService";
+import { useDMStore } from "@/store/useDMStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 
-const useGetMessages = (channelId: string) => {
+const useGetDmMessages = (dmId: string) => {
     const router = useRouter();
-    const { setTextChannels, textChannels, setLoading } = useTextChannelStore();
+    const { setDMs, dms, setLoading } = useDMStore();
     useEffect(() => {
         const fetchMessages = async () => {
-            if (!textChannels[channelId]) {
+            if (!dms[dmId].messages || dms[dmId].messages.length === 0) {
                 setLoading(true);
             }
             try {
-                const response = await getMessages(channelId);
+                const response = await getMessages(dmId);
                 const data = response?.data;
                 if (data.success) {
-                    const updatedTextChannels = {
-                        ...textChannels,
-                        [channelId]:data.messages,
+                    const updatedDMs = {
+                        ...dms,
+                        [dmId]:{
+                            ...dms[dmId],
+                            messages: data.messages,
+                        },
                     };
-                    setTextChannels(updatedTextChannels);
+                    setDMs(updatedDMs);
                 } else {
                     toast.error(data.message || "Failed to fetch messages. Please try again.");
                 }
@@ -34,9 +37,9 @@ const useGetMessages = (channelId: string) => {
                 setLoading(false);
             }
         }
-        fetchMessages();
-    }, [router]);   
+        if(dmId) fetchMessages();
+    }, [router, dmId]);   
 }
 
-export default useGetMessages;
+export default useGetDmMessages;
 

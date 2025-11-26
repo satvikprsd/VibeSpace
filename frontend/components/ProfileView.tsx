@@ -13,11 +13,14 @@ import { useServerStore } from "@/store/useServerStore";
 import { useUserStore } from "@/store/useUserStore";
 import { Pencil } from "lucide-react";
 import Image from "next/image"
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 export function ProfileView() {
     const {user, setUser} = useUserStore();
-    const {server, setServer} = useServerStore();
+    const { serverId } = useParams();
+    const {servers, setServers} = useServerStore();
+    const server = servers[serverId as string];
     if (!user) return null;
     const handleStatusChange = async (status: 'Online' | 'Offline' | 'Idle' | 'Dnd') => {
         const response = await updateStatus(status);
@@ -30,7 +33,8 @@ export function ProfileView() {
                 ...server!,
                 members: server?.members?.map(member => member._id === user?._id ? newme : member)
             }
-            setServer(updatedServer);
+            const updatedServers = {...servers, [serverId as string]: updatedServer};
+            setServers(updatedServers);
             toast.success("Status changed to " + status);
         }
         else {

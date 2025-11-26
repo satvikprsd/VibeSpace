@@ -6,7 +6,6 @@ import { InternalServerError } from "./user.controller.js";
 
 export const githubAuth = async (req, res) => {
     const redirectUri = process.env.BACKEND_URL + "/api/v1/auth/github/callback";
-    console.log("Redirect URI:", redirectUri);
     const scope = "read:user user:email repo";
     const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scope}`;
     res.redirect(githubAuthUrl);
@@ -28,7 +27,6 @@ export const githubAuthCallback = async (req, res) => {
         },
         { headers: { Accept: "application/json" } }
         )
-        console.log(tokenResponse)
         const accessToken = tokenResponse.data.access_token;
         if (!accessToken) {
             return res.status(400).json({ message: 'Failed to obtain access token from GitHub' });
@@ -38,7 +36,6 @@ export const githubAuthCallback = async (req, res) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         const githubProfile = userResponse.data;
-        console.log(githubProfile);
 
         const emailRes = await axios.get("https://api.github.com/user/emails", {
             headers: { Authorization: `Bearer ${accessToken}` },

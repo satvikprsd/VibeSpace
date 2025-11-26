@@ -3,7 +3,7 @@ import Image from "next/image"
 
 const UserRow = ({ user, className } : { user: User; className?: string}) => {
   return (
-    <div className={`flex items-center relative w-70 hover:bg-layer-1/40 p-1 rounded-lg transition-colors duration-150 hover:cursor-pointer flex-1 ${className}`}>
+    <div className={`flex items-center relative w-auto hover:bg-layer-1/40 p-1 rounded-lg transition-colors duration-150 hover:cursor-pointer flex-1 ${className}`}>
         <div className="relative">
             <Image
                 alt="User Avatar"

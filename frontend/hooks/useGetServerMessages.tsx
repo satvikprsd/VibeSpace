@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 
-const useGetMessages = (channelId: string) => {
+const useGetServerMessages = (channelId: string) => {
     const router = useRouter();
     const { setTextChannels, textChannels, setLoading } = useTextChannelStore();
     useEffect(() => {
@@ -38,5 +38,5 @@ const useGetMessages = (channelId: string) => {
     }, [router]);   
 }
 
-export default useGetMessages;
+export default useGetServerMessages;
 

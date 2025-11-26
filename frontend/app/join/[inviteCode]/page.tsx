@@ -12,12 +12,13 @@ const JoinPage = () => {
   const router = useRouter();
   useGetInviteDetails(inviteCode as string);
 
-  const {invite, loading} = useInviteStore();
+  const {invite, setInvite, loading} = useInviteStore();
 
   const handleJoin = async () => {
     const response = await joinServer(inviteCode as string);
     const data = response?.data;
     if (data?.success) {
+        setInvite(null);
         toast.success(data.message || "Successfully joined the server");
         router.push(`/channels/${data.server._id}/${data.server?.defaultChannelId}`);
     } else {

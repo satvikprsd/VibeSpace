@@ -4,6 +4,7 @@ import {persist, devtools} from "zustand/middleware";
 interface UIState {
     topBarText: string;
     setTopBarText: (text: string) => void;
+    logout: () => void;
 }
 
 export const useUIStore = create<UIState>()(
@@ -12,6 +13,7 @@ export const useUIStore = create<UIState>()(
             (set) => ({
                 topBarText: "Friends",
                 setTopBarText: (text: string) => set({topBarText: text}),
+                logout: () => set({ topBarText: "Friends" }),
             }),
             {
                 name: "ui-storage",

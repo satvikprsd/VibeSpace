@@ -1,7 +1,7 @@
 "use client";
-import ChatArea from "@/components/server/ChatArea";
+import { ServerChatArea } from "@/components/server/ServerChatArea";
 import { Input } from "@/components/ui/input";
-import useGetMessages from "@/hooks/useGetMessages";
+import useGetServerMessages from "@/hooks/useGetServerMessages";
 import { sendMessage } from "@/services/textChannelService";
 import { useServerStore } from "@/store/useServerStore";
 import { useTextChannelStore } from "@/store/useTextChannelStore";
@@ -13,12 +13,13 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const ChannelPage = () => {
-    const { channelId } = useParams();
-    const { server } = useServerStore();
-    useGetMessages(channelId as string);
+    const { channelId, serverId } = useParams();
+    const { servers } = useServerStore();
+    useGetServerMessages(channelId as string);
+    const server = servers[serverId as string];
     const channel = server?.textChannels.find((ch) => ch._id === channelId);
     const [msg, setMsg] = useState("");
-    const {messages, setMessages} = useTextChannelStore();
+    const {addMessage, updateMessage} = useTextChannelStore();
     const {user} = useUserStore();
     const {setTopBarText} = useUIStore();
     useEffect(() => {
@@ -30,12 +31,21 @@ const ChannelPage = () => {
     }, [server, setTopBarText]);
 
     const handleSendMessage = async () => {
+        const mockMessageId = "temp-id-" + Date.now();
+        const mockMessage = {
+            _id: mockMessageId,
+            message: msg,
+            sender: user!,
+            origin: 'textChannel' as const,
+            channel: channelId as string,
+            createdAt: new Date(),
+        };
+        addMessage(channelId as string, mockMessage);
+        setMsg("");
         const response = await sendMessage(channelId as string, { content: msg });
         if (response?.data.success) {
             const newMessage = {...response?.data.messageData, sender: user, origin: 'textChannel', channel: channelId};
-            console.log(newMessage);
-            setMessages([...messages, newMessage]);
-            setMsg("");
+            updateMessage(channelId as string, mockMessageId, newMessage);
         } else {
             toast.error(response?.data.message || "Failed to send message. Please try again.");
             console.error("Failed to send message:", response?.data.message);
@@ -50,7 +60,7 @@ const ChannelPage = () => {
                     {channel?.name || "Channel"}
                 </h2>
             </div>
-            <ChatArea />
+            <ServerChatArea />
             <div className="relative bottom-0 p-2 pt-0 mt-px w-full bg-background">
                 <Input onKeyDown={(e) => {if (e.key === 'Enter' && !e.shiftKey){e.preventDefault();handleSendMessage();}}} value={msg} onChange={(e) => setMsg(e.target.value)} className="h-15 bg-layer-2! w-full!"/>
                 <SendHorizonal onClick={handleSendMessage} className="absolute right-7 bottom-7 w-5 h-5 text-foreground/70 hover:text-foreground cursor-pointer"/>

@@ -12,7 +12,6 @@ import { useState } from "react";
 const ServerRepoList = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {user} = useUserStore();
-  const {setTopBarText} = useUIStore();
   const router = useRouter();
   const {theme, systemTheme} = useTheme();
   if (!theme) return null;

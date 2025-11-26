@@ -10,9 +10,9 @@ const messageSchema = new mongoose.Schema({
         type: String,
         enum: ['textChannel', 'directMessage'],
     },
-    receiver: {
+    convo: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Convo',
     },
     channel: {
         type: mongoose.Schema.Types.ObjectId,
@@ -29,8 +29,8 @@ const messageSchema = new mongoose.Schema({
 });
 
 messageSchema.pre('validate', function(next) {
-    if (!this.receiver && !this.channel) {
-        next(new Error('receiver or channelis required'));
+    if (!this.convo && !this.channel) {
+        next(new Error('convo or channelis required'));
     } else {
         next();
     }

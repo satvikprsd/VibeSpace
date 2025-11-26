@@ -14,7 +14,7 @@ export const createOrGetConvo = async (req, res) => {
         if (!user || !participant) {
             return res.status(404).json({ message: 'User not found' });
         }
-        const existingConvo = await Convo.findOne({participants: { $all: [userId, participantId] }}).populate({ path: 'participants', select: '-password' });
+        const existingConvo = await Convo.findOne({participants: { $all: [userId, participantId] }}).populate({ path: 'participants', select: '-password' }).select('-messages');
         if (existingConvo) {
             return res.status(200).json({ success: true, convo: existingConvo });
         }
@@ -22,7 +22,7 @@ export const createOrGetConvo = async (req, res) => {
             participants: [userId, participantId],
             messages: []
         });
-        const populatedConvo = await Convo.findById(newConvo._id).populate({ path: 'participants', select: '-password' });
+        const populatedConvo = await Convo.findById(newConvo._id).populate({ path: 'participants', select: '-password' }).select('-messages');
         res.status(201).json({ success: true, convo: populatedConvo });
     }
     catch (error) {
@@ -34,7 +34,7 @@ export const createOrGetConvo = async (req, res) => {
 export const getUserConvos = async (req, res) => {
     try {
         const userId = req.user.id;
-        const convos = await Convo.find({ participants: userId }).populate({ path: 'participants', select: '-password' }).populate({ path: 'messages.sender', select: '-password' });
+        const convos = await Convo.find({ participants: userId }).populate({ path: 'participants', select: '-password' }).select('-messages');
         res.status(200).json({ success: true, convos });
     }
     catch (error) {
