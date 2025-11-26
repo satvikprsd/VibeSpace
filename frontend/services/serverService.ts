@@ -118,7 +118,7 @@ export const leaveServer = async (serverId: string) => {
 
 export const createTextChannel = async (serverId: string, channelData: { name: string; }) => {
     try {
-        const response = await axios.post(`/servers/${serverId}/text-channels`, channelData, {
+        const response = await axios.post(`/servers/${serverId}/text-channel`, channelData, {
             headers: {
                 'Content-Type': 'application/json',
             },

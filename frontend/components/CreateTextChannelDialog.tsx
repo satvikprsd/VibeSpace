@@ -60,7 +60,7 @@ const CreateTextChannelDialog = ({serverId, setIsOpen} : {serverId: string, setI
     <DialogContent className="bg-card text-card-foreground rounded-2xl shadow-2xl w-[400px]! flex flex-col gap-6 p-8">
       <form className="" onSubmit={TextChannelCreate}>
         <div className="flex flex-col gap-5">
-          <h2 className="text-2xl font-bold">Create a New Server</h2>
+          <h2 className="text-2xl font-bold">Create a Text Channel</h2>
 
           <Input type="text" name="name" onChange={handleChange} value={inputs.name} placeholder="Text Channel Name" className="border-2 border-layer-2" />
           <Button type="submit" className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/80 transition">
