@@ -1,5 +1,5 @@
 import { useServerStore } from "@/store/useServerStore";
-import UserRow from "../UserRow";
+import UserRow from "../common/UserRow";
 import { useParams } from "next/navigation";
 
 const MembersList = () => {
@@ -10,7 +10,7 @@ const MembersList = () => {
   const offlineUsers = server?.members?.filter(member => member.status === 'Offline') || [];
 
   return (
-    <div className="w-72 bg-background border-l border-border p-4 space-y-4 text-foreground overflow-y-auto">
+    <div className="w-65 bg-background border-l border-border p-4 space-y-4 text-foreground overflow-y-auto">
       <div>
         {onlineUsers.length > 0 && <h3 className="text-sm mb-1">Online - {onlineUsers.length}</h3>}
         {onlineUsers.map((user) => (

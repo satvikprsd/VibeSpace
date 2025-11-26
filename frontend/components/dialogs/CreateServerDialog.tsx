@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, SetStateAction, use, useState } from "react";
-import { Button } from "./ui/button"
-import { DialogContent } from "./ui/dialog"
-import { Input } from "./ui/input"
-import Loader from "./ui/loader";
+import { Button } from "@/components/ui/button"
+import { DialogContent } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import Loader from "@/components/ui/loader";
 import { createServer } from "@/services/serverService";
 import { toast } from "sonner";
 import { AxiosError } from "axios";

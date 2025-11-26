@@ -1,11 +1,11 @@
 import { useFriendsStore } from "@/store/useFriendsStore";
 import { Check, MessageCircle, X } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { handleFriendRequest, sendFriendRequest } from "@/services/userService";
 import { toast } from "sonner";
-import UserRow from "../UserRow";
+import UserRow from "@/components/common/UserRow";
 import { useUserStore } from "@/store/useUserStore";
 import { createOrGetConvo } from "@/services/convoService";
 import { useRouter } from "next/navigation";

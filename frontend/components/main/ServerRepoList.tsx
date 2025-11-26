@@ -1,7 +1,6 @@
 "use client";
-import CreateServerDialog from "@/components/CreateServerDialog";
+import CreateServerDialog from "@/components/dialogs/CreateServerDialog";
 import { Dialog, DialogHeader } from "@/components/ui/dialog"
-import { useUIStore } from "@/store/useUIStore";
 import { useUserStore } from "@/store/useUserStore";
 import { PlusCircle } from "lucide-react"
 import { useTheme } from "next-themes";

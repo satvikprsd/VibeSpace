@@ -1,6 +1,6 @@
 import { DM, useDMStore } from "@/store/useDMStore";
 import { useUserStore } from "@/store/useUserStore";
-import UserRow from "../UserRow";
+import UserRow from "../common/UserRow";
 import { useRouter } from "next/navigation";
 
 const DMList = () => {

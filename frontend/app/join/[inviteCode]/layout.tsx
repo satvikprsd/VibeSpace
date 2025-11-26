@@ -1,6 +1,6 @@
 "use client";
 
-import ProtectdLayout from "@/components/ProtectedLayout";
+import ProtectdLayout from "@/components/utils/ProtectedLayout";
 
 const JoinLayout = ({ children }: { children: React.ReactNode }) => {
 

@@ -3,7 +3,7 @@
 import { useUserStore } from "@/store/useUserStore";
 import { Settings } from "lucide-react";
 import Image from "next/image";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { ProfileView } from "./ProfileView";
 import { resestStores } from "@/store/resetStores";
 
@@ -11,7 +11,7 @@ const UserProfile = () => {
     const {user, isLoggedIn, setIsLoggedIn} = useUserStore();
     if (!isLoggedIn) return null;
     return (
-        <div className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-84">
+        <div className="flex items-center bg-layer-2 p-2 pr-4 rounded-lg w-84 min-h-15">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <div className="flex items-center relative w-7  0 hover:bg-layer-1/40 p-1 rounded-lg transition-colors duration-150 hover:cursor-pointer flex-1">

@@ -220,3 +220,8 @@ html, body {
 .fade-in {
   animation: fadeIn 300ms ease-in-out;
 }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4f545c transparent;
+}

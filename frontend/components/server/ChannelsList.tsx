@@ -1,12 +1,12 @@
 import { useServerStore } from "@/store/useServerStore";
 import { ChevronDown, Hash, Plus } from "lucide-react"
 import { Dialog } from "../ui/dialog";
-import CreateTextChannelDialog from "../CreateTextChannelDialog";
+import CreateTextChannelDialog from "../dialogs/CreateTextChannelDialog";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ServerDropdown } from "../ServerDropdown";
-import CreateServerInviteDialog from "../CreateServerInviteDialog";
+import { ServerDropdown } from "./ServerDropdown";
+import CreateServerInviteDialog from "../dialogs/CreateServerInviteDialog";
 
 const ChannelsList = () => {
   const { servers } = useServerStore();

@@ -1,23 +1,26 @@
 import { SetStateAction, useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Input } from "./ui/input";
+import { Button } from "@/components/ui/button";
+import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Search, ChevronDown } from "lucide-react";
 import { generateInvite } from "@/services/serverService";
-import { useFriendsStore } from "@/store/useFriendsStore";
 import Image from "next/image";
 import { Server } from "@/store/useServerStore";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { sendMessage } from "@/services/convoService";
+import { DM, useDMStore } from "@/store/useDMStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const CreateServerInviteDialog = ({isOpen, server, }: {isOpen: boolean; server: Server;}) => {
-  const {friends} = useFriendsStore();
+  const {dms} = useDMStore();
+  const {user} = useUserStore();
   const [inviteLink, setInviteLink] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [expireAfter, setExpireAfter] = useState("7 days");
   const [maxUses, setMaxUses] = useState("No limit");
   const [copied, setCopied] = useState(false);
-
+  const [inviteSent, setInviteSent] = useState<{[key: string]: boolean}>({});
   const fetchInviteLink = async () => {
     setIsLoading(true);
     try {
@@ -56,6 +59,17 @@ const CreateServerInviteDialog = ({isOpen, server, }: {isOpen: boolean; server: 
     await fetchInviteLink();
     setShowSettings(false);
   };
+
+  const handleSendInvite = async (convoId: string) => {
+    const response = await sendMessage(convoId, `${inviteLink}`);
+    const data = response?.data;
+    if (data?.success) {
+      setInviteSent((prev) => ({ ...prev, [convoId]: true }));
+    }
+    else{
+      console.error("Failed to send invite:", data?.message);
+    }
+  }
 
   if (showSettings) {
     return (
@@ -153,13 +167,16 @@ const CreateServerInviteDialog = ({isOpen, server, }: {isOpen: boolean; server: 
         </div>
 
         <div className="max-h-[200px] overflow-y-auto pr-1 -mr-2 space-y-1 custom-scrollbar mb-6">
-          {friends?.map((friend) => (
-            <div key={friend._id} className="flex items-center justify-between p-2 hover:bg-foreground/10 rounded group transition-colors">
+          {Object.values(dms).map((dm: DM) => 
+          { 
+          const friend = dm.participants.filter((participant) => participant._id !== user?._id)[0];
+          return (
+            <div key={dm._id} className="flex items-center justify-between p-2 hover:bg-foreground/10 rounded group transition-colors">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-gray-300 overflow-hidden">
                    <Image
                         alt="User Avatar"
-                        src={friend?.avatar || "/default-avatar.png"}
+                        src={friend.avatar || "/default-avatar.png"}
                         className="w-8 h-8 rounded-full object-cover"
                         width={200}
                         height={200}
@@ -169,12 +186,14 @@ const CreateServerInviteDialog = ({isOpen, server, }: {isOpen: boolean; server: 
               </div>
               <Button 
                 variant="outline" 
+                onClick={() => handleSendInvite(dm._id)}
+                disabled={inviteSent[dm._id]}
                 className="border-green-600! text-green-600! hover:bg-green-600! hover:text-background! h-7 text-xs px-4 transition-all"
               >
-                Invite
+                {inviteSent[dm._id] ? "Sent" : "Invite"}
               </Button>
             </div>
-          ))}
+          )})}
         </div>
 
         <div className="h-px bg-foreground/20 w-full mb-4" />
